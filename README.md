@@ -8,7 +8,6 @@
 
 ## Como compilar
 
-Caso não exista as pastas "bin" e "obj" crie;
 Para compilar o programa execute o seguinte código na pasta do repositório:
 ```
 g++ -o ./execGrupo15 *.c*
