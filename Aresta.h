@@ -9,6 +9,7 @@ class Aresta
 private:
     No *inicio;
     No *fim;
+    void transitivoDireto_Aux(vector<int> *no, Aresta *aresta);
 
 public:
     Aresta();
@@ -17,6 +18,7 @@ public:
     void remover();
     bool vazia();
     void imprime();
+    void transitivoDireto(string arq_saida, Aresta *aresta);
 };
 
 #endif // TRACKS_H_INCLUDED

@@ -62,3 +62,41 @@ void Aresta::imprime()
     }
     cout << endl;
 }
+
+void Aresta::transitivoDireto(string arq_saida, Aresta *aresta)
+{
+    ofstream arquivo_saida(arq_saida);
+
+    if (!arquivo_saida.is_open())
+    {
+        cout << "Ocorreu um erro ao abrir o arquivo de saida!";
+    }
+
+    vector<int> no;
+
+    for (No *p = inicio; p != NULL; p = p->getProx())
+    {
+        if (!std::count(no.begin(), no.end(), p->getId()))
+        {
+            no.push_back(p->getId());
+            aresta[p->getId()].transitivoDireto_Aux(&no, aresta);
+        }
+    }
+
+    for (int i = 0; i < no.size(); i++)
+    {
+        arquivo_saida << no[i] << " ";
+    }
+}
+
+void Aresta::transitivoDireto_Aux(vector<int> *no, Aresta *aresta)
+{
+    for (No *p = inicio; p != NULL; p = p->getProx())
+    {
+        if (!std::count(no->begin(), no->end(), p->getId()))
+        {
+            no->push_back(p->getId());
+            aresta[p->getId()].transitivoDireto_Aux(no, aresta);
+        }
+    }
+}
