@@ -16,11 +16,12 @@ public:
     Aresta();
     ~Aresta();
     void adicionar(int id);
+    void adicionar(int id, int peso);
     void remover();
     bool vazia();
-    void imprime();
-    void transitivoDireto(string arq_saida, Aresta *aresta);
-    void transitivoIndireto(string arq_saida, Aresta *aresta, int qntNo, int id);
+    void imprime(int id);
+    void transitivoDireto(ofstream *arquivo_saida, Aresta *aresta);
+    void transitivoIndireto(ofstream *arquivo_saida, Aresta *aresta, int qntNo, int id);
 };
 
 #endif // TRACKS_H_INCLUDED

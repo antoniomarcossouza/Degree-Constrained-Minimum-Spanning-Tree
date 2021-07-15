@@ -14,6 +14,7 @@ class No
 {
 private:
     int id;
+    int peso = 0;
     No *proximo;
 
 public:
@@ -22,6 +23,9 @@ public:
 
     int setId(int id) { this->id = id; };
     int getId() { return id; };
+
+    int setPeso(int peso) { this->peso = peso; };
+    int getPeso() { return peso; };
 };
 
 #endif // NO_H_INCLUDED

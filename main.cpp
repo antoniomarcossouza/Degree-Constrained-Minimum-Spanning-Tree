@@ -12,17 +12,23 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-
     string arq_entrada = argv[1];
     string arq_saida = argv[2];
     int Opc_Direc = stoi(argv[3]);
+    int Opc_Peso_Aresta = stoi(argv[4]);
 
     ifstream arquivo_entrada(arq_entrada);
+    ofstream arquivo_saida(arq_saida);
 
     if (!arquivo_entrada.is_open())
     {
         cout << "Ocorreu um erro ao abrir o arquivo de entrada!";
         exit(1);
+    }
+
+    if (!arquivo_saida.is_open())
+    {
+        cout << "Ocorreu um erro ao abrir o arquivo de saida!";
     }
 
     string line;
@@ -31,18 +37,24 @@ int main(int argc, char *argv[])
     int qntNo = stoi(line);
     Aresta *aresta = new Aresta[qntNo + 1];
 
-    int dado1, dado2;
-    while (arquivo_entrada >> dado1 >> dado2)
+    int dado1, dado2, dado3;
+    if (Opc_Peso_Aresta == 0)
     {
-        aresta[dado1].adicionar(dado2);
-        if (Opc_Direc == 0)
-            aresta[dado2].adicionar(dado1);
+        while (arquivo_entrada >> dado1 >> dado2)
+        {
+            aresta[dado1].adicionar(dado2);
+            if (Opc_Direc == 0)
+                aresta[dado2].adicionar(dado1);
+        }
     }
-
-    for (int i = 1; i <= qntNo; i++)
+    else
     {
-        cout << i;
-        aresta[i].imprime();
+        while (arquivo_entrada >> dado1 >> dado2 >> dado3)
+        {
+            aresta[dado1].adicionar(dado2, dado3);
+            if (Opc_Direc == 0)
+                aresta[dado2].adicionar(dado1, dado3);
+        }
     }
 
     int option;
@@ -68,7 +80,7 @@ int main(int argc, char *argv[])
             int id;
             cout << "Digite o valor de um Id do vertice: ";
             cin >> id;
-            aresta[id].transitivoDireto(arq_saida, aresta);
+            aresta[id].transitivoDireto(&arquivo_saida, aresta);
         }
         else
         {
@@ -81,7 +93,7 @@ int main(int argc, char *argv[])
             int id;
             cout << "Digite o valor de um Id do vertice: ";
             cin >> id;
-            aresta[id].transitivoIndireto(arq_saida, aresta, qntNo, id);
+            aresta[id].transitivoIndireto(&arquivo_saida, aresta, qntNo, id);
         }
         else
         {
@@ -91,5 +103,7 @@ int main(int argc, char *argv[])
     }
 
     delete[] aresta;
+    arquivo_saida.close();
+    arquivo_entrada.close();
     return 0;
 }

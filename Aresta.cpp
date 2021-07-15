@@ -41,6 +41,18 @@ void Aresta::adicionar(int id)
     fim = p;
 }
 
+void Aresta::adicionar(int id, int peso)
+{
+    No *p = new No();
+    p->setId(id);
+    p->setProximo(NULL);
+    if (fim == NULL)
+        inicio = p;
+    else
+        fim->setProximo(p);
+    fim = p;
+}
+
 void Aresta::remover()
 {
     No *p;
@@ -54,8 +66,9 @@ void Aresta::remover()
     }
 }
 
-void Aresta::imprime()
+void Aresta::imprime(int id)
 {
+    cout << id;
     for (No *p = inicio; p != NULL; p = p->getProx())
     {
         cout << " -> " << p->getId();
@@ -63,15 +76,8 @@ void Aresta::imprime()
     cout << endl;
 }
 
-void Aresta::transitivoDireto(string arq_saida, Aresta *aresta)
+void Aresta::transitivoDireto(ofstream *arquivo_saida, Aresta *aresta)
 {
-    ofstream arquivo_saida(arq_saida);
-
-    if (!arquivo_saida.is_open())
-    {
-        cout << "Ocorreu um erro ao abrir o arquivo de saida!";
-    }
-
     vector<int> no;
 
     for (No *p = inicio; p != NULL; p = p->getProx())
@@ -85,7 +91,7 @@ void Aresta::transitivoDireto(string arq_saida, Aresta *aresta)
 
     for (int i = 0; i < no.size(); i++)
     {
-        arquivo_saida << no[i] << " ";
+        *arquivo_saida << no[i] << " ";
     }
 }
 
@@ -101,15 +107,8 @@ void Aresta::transitivoDireto_Aux(vector<int> *no, Aresta *aresta)
     }
 }
 
-void Aresta::transitivoIndireto(string arq_saida, Aresta *aresta, int qntNo, int id)
+void Aresta::transitivoIndireto(ofstream *arquivo_saida, Aresta *aresta, int qntNo, int id)
 {
-    ofstream arquivo_saida(arq_saida);
-
-    if (!arquivo_saida.is_open())
-    {
-        cout << "Ocorreu um erro ao abrir o arquivo de saida!";
-    }
-
     vector<int> no;
 
     for (int i = 1; i <= qntNo; i++)
@@ -119,7 +118,7 @@ void Aresta::transitivoIndireto(string arq_saida, Aresta *aresta, int qntNo, int
 
     for (int i = 0; i < no.size(); i++)
     {
-        arquivo_saida << no[i] << " ";
+        *arquivo_saida << no[i] << " ";
     }
 }
 
