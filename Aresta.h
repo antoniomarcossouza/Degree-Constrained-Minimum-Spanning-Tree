@@ -10,6 +10,7 @@ private:
     No *inicio;
     No *fim;
     void transitivoDireto_Aux(vector<int> *no, Aresta *aresta);
+    void transitivoIndireto_Aux(vector<int> *no, Aresta *aresta, int id, int i, int qntNo);
 
 public:
     Aresta();
@@ -19,6 +20,7 @@ public:
     bool vazia();
     void imprime();
     void transitivoDireto(string arq_saida, Aresta *aresta);
+    void transitivoIndireto(string arq_saida, Aresta *aresta, int qntNo, int id);
 };
 
 #endif // TRACKS_H_INCLUDED

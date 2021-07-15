@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     cout << "Trabalho de Grafos" << endl;
     cout << "----------------------" << endl;
     cout << "1- Transitivo Direto" << endl;
-    cout << "2- " << endl;
+    cout << "2- Transitivo Indireto" << endl;
     cout << "3- " << endl;
     cout << "4- " << endl;
     cout << "5- " << endl;
@@ -69,6 +69,19 @@ int main(int argc, char *argv[])
             cout << "Digite o valor de um Id do vertice: ";
             cin >> id;
             aresta[id].transitivoDireto(arq_saida, aresta);
+        }
+        else
+        {
+            cout << "Esté grafo não é direcionado" << endl;
+        }
+        break;
+    case 2:
+        if (Opc_Direc == 1)
+        {
+            int id;
+            cout << "Digite o valor de um Id do vertice: ";
+            cin >> id;
+            aresta[id].transitivoIndireto(arq_saida, aresta, qntNo, id);
         }
         else
         {
