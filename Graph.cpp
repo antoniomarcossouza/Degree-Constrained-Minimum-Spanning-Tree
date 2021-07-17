@@ -91,18 +91,6 @@ Node *Graph::getLastNode()
     return this->last_node;
 }
 
-bool Graph::hasNode(int id)
-{
-    if (this->first_node != nullptr)
-    {
-        for (Node *aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
-            if (aux->getId() == id)
-                return true;
-    }
-
-    return false;
-}
-
 // Other methods
 /*
     The outdegree attribute of nodes is used as a counter for the number of edges in the graph.
@@ -110,7 +98,7 @@ bool Graph::hasNode(int id)
 */
 void Graph::insertNode(int id)
 {
-    if (!hasNode(id))
+    if (!searchNode(id))
     {
         if (this->first_node != nullptr)
         {
@@ -128,10 +116,10 @@ void Graph::insertNode(int id)
 
 void Graph::insertEdge(int id, int target_id, float weight)
 {
-    if (!hasNode(id))
+    if (!searchNode(id))
         this->insertNode(id);
 
-    if (!hasNode(target_id))
+    if (!searchNode(target_id))
         this->insertNode(target_id);
 
     if (this->directed)
@@ -152,7 +140,7 @@ void Graph::insertEdge(int id, int target_id, float weight)
 
 void Graph::removeNode(int id)
 {
-    if (hasNode(id))
+    if (searchNode(id))
     {
         if (this->first_node->getId() == id)
         {
@@ -196,6 +184,14 @@ void Graph::removeNode(int id)
 
 bool Graph::searchNode(int id)
 {
+    if (this->first_node != nullptr)
+    {
+        for (Node *aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
+            if (aux->getId() == id)
+                return true;
+    }
+
+    return false;
 }
 
 Node *Graph::getNode(int id)

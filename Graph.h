@@ -66,8 +66,6 @@ public:
 
 private:
     //Auxiliar methods
-    bool hasNode(int id);
-
     void transitivoDireto_Aux(vector<int> *no, Node *node);
     void transitivoIndireto_Aux(vector<int> *no, Node *node, int id);
 };
