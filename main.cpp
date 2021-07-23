@@ -95,12 +95,11 @@ Graph *leituraInstancia(ifstream &input_file, int directed, int weightedEdge, in
     Graph *graph = new Graph(order, directed, weightedEdge, weightedNode);
 
     //Leitura de arquivo
-    while(input_file >> idNodeSource >> idNodeTarget) {
+    while (input_file >> idNodeSource >> idNodeTarget)
+    {
 
         graph->insertEdge(idNodeSource, idNodeTarget, 0);
-
     }
-
 
     return graph;
 }
@@ -130,7 +129,11 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     switch (selecao)
     {
-
+    case 0:
+    {
+        cout << "Você está saindo..." << endl;
+        break;
+    }
     case 1:
     {
         if (graph->getDirected() == true)
@@ -161,13 +164,19 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 3:
     {
-
         break;
     }
 
     case 4:
     {
-
+        if (graph->getWeightedEdge() && graph->getDirected())
+        {
+            graph->floydWarshall(output_file);
+        }
+        else
+        {
+            cout << "Esté grafo não tem aresta ponderada ou direcionado!" << endl;
+        }
         break;
     }
 

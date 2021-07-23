@@ -21,6 +21,7 @@ private:
     unsigned int out_degree;
     float weight;
     Node *next_node;
+    int position;
 
 public:
     // Constructor
@@ -48,6 +49,10 @@ public:
     void incrementInDegree();
     void decrementInDegree();
     Edge *hasEdgeBetween(int target_id);
+
+    void setPosition(int position);
+    int getPosition();
+
     // Auxiliar methods
 };
 

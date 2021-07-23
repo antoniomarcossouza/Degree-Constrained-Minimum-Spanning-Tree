@@ -14,6 +14,8 @@
 #include <string>
 #include <algorithm>
 
+#define INF 99999
+
 using namespace std;
 
 /**************************************************************************************************
@@ -23,7 +25,6 @@ using namespace std;
 // Constructor
 Graph::Graph(int order, bool directed, bool weighted_edge, bool weighted_node)
 {
-
     this->order = order;
     this->directed = directed;
     this->weighted_edge = weighted_edge;
@@ -212,12 +213,71 @@ void Graph::breadthFirstSearch(ofstream &output_file)
 {
 }
 
-float Graph::floydMarshall(int idSource, int idTarget)
+void Graph::floydWarshall(ofstream &output_file)
 {
+    int dist[order][order];
+
+    int contadorNode = 0;
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode(), contadorNode++)
+    {
+        node->setPosition(contadorNode);
+    }
+
+    for (int i = 0; i < order; i++)
+    {
+        for (int j = 0; j < order; j++)
+        {
+            dist[i][j] = INF; // Seta todos os valores da matriz pra infinito
+            if (i == j)
+            {
+                dist[i][j] = 0; // Coloca a distância entre o vértice e ele mesmo
+            }
+        }
+    }
+
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        {
+            Node *aux = getNode(edge->getTargetId());
+            dist[node->getPosition()][aux->getPosition()] = edge->getWeight();
+        }
+    }
+
+    for (int k = 0; k < order; k++)
+    {
+        for (int i = 0; i < order; i++)
+        {
+            for (int j = 0; j < order; j++)
+            {
+                if (dist[i][j] > dist[i][k] + dist[k][j])
+                {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < order; i++)
+    {
+        output_file << endl;
+        for (int j = 0; j < order; j++)
+        {
+            if (dist[i][j] == INF)
+            {
+                output_file << " INF ";
+            }
+            else
+            {
+                output_file << "  " << dist[i][j] << "  ";
+            }
+        }
+    }
 }
 
 float Graph::dijkstra(int idSource, int idTarget)
 {
+    return 0;
 }
 
 //function that prints a topological sorting
@@ -230,13 +290,16 @@ void breadthFirstSearch(ofstream &output_file)
 }
 Graph *getVertexInduced(int *listIdNodes)
 {
+    return 0;
 }
 
 Graph *agmKuskal()
 {
+    return 0;
 }
 Graph *agmPrim()
 {
+    return 0;
 }
 
 // Funções da primeira etapa
