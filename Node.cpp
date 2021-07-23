@@ -238,3 +238,13 @@ int Node::getPosition()
 {
     return this->position;
 }
+
+void Node::setFather(int id)
+{
+    this->father= id;
+}
+
+int Node::getFather()
+{
+    return this->father;
+}

@@ -22,6 +22,7 @@ private:
     float weight;
     Node *next_node;
     int position;
+    int father;
 
 public:
     // Constructor
@@ -54,6 +55,8 @@ public:
     int getPosition();
 
     // Auxiliar methods
+    void setFather(int id);
+    int  getFather();
 };
 
 #endif // NODE_H_INCLUDED

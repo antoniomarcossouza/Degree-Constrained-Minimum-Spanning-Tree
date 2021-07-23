@@ -277,7 +277,6 @@ void Graph::floydWarshall(ofstream &output_file)
 
 float Graph::dijkstra(int idSource, int idTarget)
 {
-    return 0;
 }
 
 //function that prints a topological sorting
@@ -290,16 +289,23 @@ void breadthFirstSearch(ofstream &output_file)
 }
 Graph *getVertexInduced(int *listIdNodes)
 {
-    return 0;
 }
 
-Graph *agmKuskal()
+Graph *agmKuskal(Graph *graph)
 {
-    return 0;
+    Graph *graphKuskal = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
+
+    list<Edge *> listEdge;
+    graph->father();
+    for (Edge *&arestaAux : listEdge)
+    {
+        if (!graph->cicle(arestaAux))
+        {
+        }
+    }
 }
 Graph *agmPrim()
 {
-    return 0;
 }
 
 // Funções da primeira etapa
@@ -365,4 +371,43 @@ void Graph::transitivoIndireto_Aux(vector<int> *no, Node *node, int id)
             }
         }
     }
+}
+
+void Graph::father()
+{
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        node->setFather(node->getId());
+    }
+}
+
+Node *Graph::find(Node *node)
+{
+    Node *aux = getNode(node->getFather());
+
+    if (aux == node)
+        return aux;
+    else
+        return find(aux);
+}
+
+void Graph::unites(Node *x, Node *y)
+{
+    Node *xraiz = find(x);
+    Node *yraiz = find(y);
+
+    xraiz->setFather(yraiz->getId());
+}
+
+bool Graph::cicle(Edge *edge)
+{
+
+    Node *aux1 = getNode(edge->getTargetId());
+    Node *aux2 = getNode(edge->getTargetId());
+
+    if (find(aux1) == find(aux2))
+        return true;
+    else
+        unites(aux1, aux2);
+    return false;
 }
