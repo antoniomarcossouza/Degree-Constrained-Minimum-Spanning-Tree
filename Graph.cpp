@@ -310,7 +310,7 @@ Graph *agmPrim()
 
 // Funções da primeira etapa
 
-void Graph::transitivoDireto(ofstream *arquivo_saida, int id)
+void Graph::transitivoDireto(ofstream &output_file, int id)
 {
     vector<int> no;
 
@@ -327,7 +327,7 @@ void Graph::transitivoDireto(ofstream *arquivo_saida, int id)
 
     for (int i = 0; i < no.size(); i++)
     {
-        *arquivo_saida << no[i] << " ";
+        output_file << no[i] << " ";
     }
 }
 
@@ -343,7 +343,7 @@ void Graph::transitivoDireto_Aux(vector<int> *no, Node *node)
     }
 }
 
-void Graph::transitivoIndireto(ofstream *arquivo_saida, int id)
+void Graph::transitivoIndireto(ofstream &output_file, int id)
 {
     vector<int> no;
 
@@ -354,7 +354,7 @@ void Graph::transitivoIndireto(ofstream *arquivo_saida, int id)
 
     for (int i = 0; i < no.size(); i++)
     {
-        *arquivo_saida << no[i] << " ";
+        output_file << no[i] << " ";
     }
 }
 
@@ -370,6 +370,43 @@ void Graph::transitivoIndireto_Aux(vector<int> *no, Node *node, int id)
                 transitivoIndireto_Aux(no, node, node->getId());
             }
         }
+    }
+}
+
+void Graph::ordenacaoTopologica(ofstream &output_file)
+{
+    vector<int> no;
+    int in[order];
+
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+        in[node->getId()] = node->getInDegree();
+
+    ordenacaoTopologica_Aux(&no, in);
+
+    for (int i = 0; i < no.size(); i++)
+        output_file << no[i] << " ";
+}
+
+void Graph::ordenacaoTopologica_Aux(vector<int> *no, int in[])
+{
+    if (no->size() != order)
+    {
+        for (int i = 0; i < order; i++)
+        {
+            if (in[i] == 0)
+            {
+                no->push_back(i);
+                in[i] = -1;
+                Node *node = getNode(i);
+                for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+                {
+                    in[edge->getTargetId()]--;
+                }
+                ordenacaoTopologica_Aux(no, in);
+                return;
+            }
+        }
+        cout << "O grafo não é acíclico direcionado." << endl;
     }
 }
 

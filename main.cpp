@@ -117,6 +117,8 @@ int menu()
     cout << "[4] Caminho Mínimo entre dois vértices - Floyd" << endl;
     cout << "[5] Árvore Geradora Mínima de Prim" << endl;
     cout << "[6] Árvore Geradora Mínima de Kruskal" << endl;
+    cout << "[7] Árvore dada pela ordem de caminhamento em profundidade" << endl;
+    cout << "[8] Grafo acíclico direcionado" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -131,17 +133,17 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     {
     case 0:
     {
-        cout << "Você está saindo..." << endl;
+        cout << "Você está saindo." << endl;
         break;
     }
     case 1:
     {
-        if (graph->getDirected() == true)
+        if (graph->getDirected())
         {
             int id;
             cout << "Digite o valor de um Id do vertice: ";
             cin >> id;
-            graph->transitivoDireto(&output_file, id);
+            graph->transitivoDireto(output_file, id);
         }
         else
             cout << "Esté grafo não é direcionado" << endl;
@@ -150,12 +152,12 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 2:
     {
-        if (graph->getDirected() == true)
+        if (graph->getDirected())
         {
             int id;
             cout << "Digite o valor de um Id do vertice: ";
             cin >> id;
-            graph->transitivoIndireto(&output_file, id);
+            graph->transitivoIndireto(output_file, id);
         }
         else
             cout << "Esté grafo não é direcionado" << endl;
@@ -198,7 +200,12 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     }
     case 8:
     {
-
+        if (graph->getDirected())
+        {
+            graph->ordenacaoTopologica(output_file);
+        }
+        else
+            cout << "O grafo não é acíclico direcionado." << endl;
         break;
     }
     default:
