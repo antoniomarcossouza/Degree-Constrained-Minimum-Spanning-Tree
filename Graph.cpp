@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
+#include <tuple>
 
 #define INF 99999
 
@@ -314,16 +315,12 @@ Graph *agmKuskal(Graph *graph)
 Graph *agmPrim(Graph *graph, ofstream &output_file)
 {
     Graph *minSpanningTree = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
-    // Seja (u,v) a aresta de menor peso.
-    // F <- {(u,v)}
-    vector<Node> no;
-    int contadorNode = 0;
+    typedef vector<tuple<int, int, int>> no;
+    no tl;
+
     Edge *minEdge = graph->getFirstNode()->getFirstEdge();
     Node *aux;
-    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode(), contadorNode++)
-    {
-        node->setPosition(contadorNode);
-    }
+
     for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
@@ -335,74 +332,41 @@ Graph *agmPrim(Graph *graph, ofstream &output_file)
             }
         }
     }
+
     minSpanningTree->insertEdge(aux->getId(), minEdge->getTargetId(), minEdge->getWeight());
-    no[aux->getId()] = 0;
-    no[minEdge->getTargetId()] = 0;
-    // Para i = 1,...,n faça
-    //     Se c(i,u) < c(i,v) então prox(i) <- u
-    //     Senão prox(i) <- v
-    // fim-para
+    tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), 0));
 
-    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
+    for (int i = 0; i < graph->getOrder(); i++)
     {
-        do
+        for (Node *node = minSpanningTree->getFirstNode(); node != nullptr; node = node->getNextNode())
         {
-            min = node->getFirstEdge();
-
-        } while ();
-        for (Edge *aresta = node->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
-        {
-            if (minEdge->getWeight() > aresta->getWeight())
+            minEdge = node->getFirstEdge();
+            for (Edge *aresta = graph->getNode(node->getId())->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
             {
-                min = node->getFirstEdge();
+                if (get<2>(tl[minEdge->getTargetId()]) == 0 || (aresta->getWeight() < minEdge->getWeight() && get<2>(tl[aresta->getTargetId()]) != 0))
+                {
+                    minEdge = aresta;
+                    aux = node;
+                }
             }
+            tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), minEdge->getWeight()));
         }
-        node[node->getId()] = minEdge->getWeight();
     }
 
-    /*
-    for (int i = 1; i < graph->getOrder(); i++)
+    int min = get<2>(tl[0]);
+    int idMin = 0;
+    for (int i = 0; i < tl.size(); i++)
     {
-        if (Custo_entre_Nos(i, u) < Custo_entre_Nos(i, v))
+        if (get<2>(tl[i]) < min)
         {
-            prox[i] = u;
-        }
-        else
-        {
-            prox[i] = v;
+            min = get<2>(tl[i]);
+            idMin = i;
         }
     }
-    // prox(u), prox(v) <- 0, contador <- 0
-    prox[u] = 0, prox[v] = 0;
-    int j = 0;
-    // Enquanto contador < n-2 faça
-    //     Seja j tal que prox(j)!=0 e c(j,prox(j)) é mínimo.
-    //     F <- F [UNIãO] {(j,prox(j))}
-    //     prox(j) <- 0
-    //     Para i = 1,...,n faça
-    //         Se prox(i) 1 0 e c(i,prox(i)) > c(i,j) então
-    //         prox(i) <- j
-    //     fim-para
-    //     contador <- contador + 1
-    // fim-enquanto
-    while (j < graph->GetOrder())
-    {
-        if (prox[j] != 0 && Custo_entre_Nos(j, prox[j]) é mínimo.)
-        {
-            minSpanningTree->insertNode(j->getPosition());
-            minSpanningTree->insertNode(prox[j]->getPosition());
-            prox[j] = 0;
-        }
-        for (int i = 1; i < graph->getOrder(); i++)
-        {
-            if (prox[i] != 0 && Custo_entre_Nos(i, prox[i]) > Custo_entre_Nos(i, j))
-            {
-                prox(i) = j;
-            }
-        }
-        j++;
-    }
-    */
+    minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
+    tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), minEdge->getWeight());
+
+    return minSpanningTree;
 }
 
 void Graph::walk(Node *node)
