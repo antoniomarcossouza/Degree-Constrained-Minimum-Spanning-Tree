@@ -7,7 +7,9 @@ using namespace std;
  * Defining the Edge's methods
 **************************************************************************************************/
 
-// Constructor
+// Constructors
+
+
 Edge::Edge(int target_id){
 
     this->target_id = target_id;
@@ -15,6 +17,22 @@ Edge::Edge(int target_id){
     this->weight = 0;
 
 }
+
+Edge::Edge(int target_id, float weight)
+{
+    this->target_id = target_id;
+    this->next_edge = nullptr;
+    this->weight = weight;
+}
+
+Edge::Edge(int target_id,int id_origem, float weight)
+{
+    this->target_id = target_id;
+    this->id_origem = id_origem;
+    this->next_edge = nullptr;
+    this->weight = weight;
+}
+
 
 // Destructor
 Edge::~Edge(){
@@ -45,7 +63,20 @@ float Edge::getWeight(){
 
 }
 
+ int getIdOrigem() {
+     return this->id_origem;
+ }
+
 // Setters
+
+ void setTargetId(int id) {
+     this->target_id = id;
+ }
+
+ void setIdOrigem(int id) {
+     this->id_origem = id;
+ }
+
 void Edge::setNextEdge(Edge* edge){
 
     this->next_edge = edge;

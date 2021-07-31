@@ -79,6 +79,12 @@ Node *Node::getNextNode()
     return this->next_node;
 }
 
+
+int Node::getIndexSearch() 
+{
+    return this->indexSearch;
+}
+
 // Setters
 
 void Node::setNextNode(Node *next_node)
@@ -91,6 +97,11 @@ void Node::setWeight(float weight)
 {
 
     this->weight = weight;
+}
+
+void Node::setIndexSearch(int index)
+{
+    this->indexSearch = index;
 }
 
 // Other methods
@@ -248,3 +259,4 @@ int Node::getFather()
 {
     return this->father;
 }
+

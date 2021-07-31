@@ -25,6 +25,7 @@ private:
     bool weighted_node;
     Node *first_node;
     Node *last_node;
+    Graph *ArvoreGeradoraMinima;
 
 public:
     //Constructor
@@ -50,7 +51,7 @@ public:
     void topologicalSorting();
     void breadthFirstSearch(ofstream &output_file);
     Graph *getVertexInduced(int *listIdNodes);
-    Graph *agmKuskal(Graph *graph);
+    Graph *agmKruskal(Graph *graph);
     Graph *agmPrim();
     void floydWarshall(ofstream &output_file);
     float dijkstra(int idSource, int idTarget);
@@ -63,10 +64,11 @@ public:
     //primeira etapa
     void transitivoDireto(ofstream *arquivo_saida, int id);
     void transitivoIndireto(ofstream *arquivo_saida, int id);
-
+    void depthFirstSearchAux(Node* node, bool* visitados,fstream &outputFile)
     void father();
     bool cicle(Edge *edge);
-
+    void imprimeFile(ofstream *arquivo_saida); // kruskal
+    void preencheListaNos();
 private:
     //Auxiliar methods
     void transitivoDireto_Aux(vector<int> *no, Node *node);

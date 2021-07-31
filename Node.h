@@ -23,6 +23,7 @@ private:
     Node *next_node;
     int position;
     int father;
+    int indexSearch;
 
 public:
     // Constructor
@@ -50,6 +51,9 @@ public:
     void incrementInDegree();
     void decrementInDegree();
     Edge *hasEdgeBetween(int target_id);
+
+    int setIndexSearch(int i);
+    int getIndexSearch();
 
     void setPosition(int position);
     int getPosition();
