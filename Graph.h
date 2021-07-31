@@ -51,7 +51,7 @@ public:
     void breadthFirstSearch(ofstream &output_file);
     Graph *getVertexInduced(int *listIdNodes);
     Graph *agmKuskal(Graph *graph);
-    Graph *agmPrim();
+    Graph *agmPrim(Graph *graph, ofstream &output_file);
     void floydWarshall(ofstream &output_file);
     float dijkstra(int idSource, int idTarget);
 
@@ -66,6 +66,7 @@ public:
 
     void father();
     bool cicle(Edge *edge);
+    bool getConected();
 
 private:
     //Auxiliar methods
@@ -74,6 +75,7 @@ private:
 
     void unites(Node *x, Node *y);
     Node *find(Node *node);
+    void walk(Node *node);
 };
 
 #endif // GRAPH_H_INCLUDED

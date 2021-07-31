@@ -23,6 +23,8 @@ private:
     Node *next_node;
     int position;
     int father;
+    //
+    bool check;
 
 public:
     // Constructor
@@ -56,7 +58,11 @@ public:
 
     // Auxiliar methods
     void setFather(int id);
-    int  getFather();
+    int getFather();
+
+    bool getChecks();
+    void unchecks();
+    void getUnchecks();
 };
 
 #endif // NODE_H_INCLUDED

@@ -169,6 +169,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 4:
     {
+        //Floyd-Warshall
         if (graph->getWeightedEdge() && graph->getDirected())
         {
             graph->floydWarshall(output_file);
@@ -182,7 +183,15 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 5:
     {
-
+        //Prim
+        if (graph->getWeightedEdge() && !graph->getDirected() && graph->getConected())
+        {
+            // graph->agmPrim(graph, output_file);
+        }
+        else
+        {
+            cout << "Esté grafo não tem aresta ponderada ou direcionado!" << endl;
+        }
         break;
     }
 

@@ -220,7 +220,7 @@ void Graph::floydWarshall(ofstream &output_file)
     int contadorNode = 0;
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode(), contadorNode++)
     {
-        node->setPosition(contadorNode);
+        node->setPosition(contadorNode); // Seta a posição dos nós
     }
 
     for (int i = 0; i < order; i++)
@@ -239,6 +239,7 @@ void Graph::floydWarshall(ofstream &output_file)
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
+            // Itera por todos as arestas, colocando o peso como a distância entre os 2 nós
             Node *aux = getNode(edge->getTargetId());
             dist[node->getPosition()][aux->getPosition()] = edge->getWeight();
         }
@@ -250,6 +251,7 @@ void Graph::floydWarshall(ofstream &output_file)
         {
             for (int j = 0; j < order; j++)
             {
+                // Coloca a menor distância entre os nós restantes
                 if (dist[i][j] > dist[i][k] + dist[k][j])
                 {
                     dist[i][j] = dist[i][k] + dist[k][j];
@@ -263,6 +265,7 @@ void Graph::floydWarshall(ofstream &output_file)
         output_file << endl;
         for (int j = 0; j < order; j++)
         {
+            // Output
             if (dist[i][j] == INF)
             {
                 output_file << " INF ";
@@ -277,6 +280,7 @@ void Graph::floydWarshall(ofstream &output_file)
 
 float Graph::dijkstra(int idSource, int idTarget)
 {
+    return 0;
 }
 
 //function that prints a topological sorting
@@ -289,6 +293,7 @@ void breadthFirstSearch(ofstream &output_file)
 }
 Graph *getVertexInduced(int *listIdNodes)
 {
+    return 0;
 }
 
 Graph *agmKuskal(Graph *graph)
@@ -303,9 +308,136 @@ Graph *agmKuskal(Graph *graph)
         {
         }
     }
+    return 0;
 }
-Graph *agmPrim()
+
+Graph *agmPrim(Graph *graph, ofstream &output_file)
 {
+    Graph *minSpanningTree = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
+    // Seja (u,v) a aresta de menor peso.
+    // F <- {(u,v)}
+    vector<Node> no;
+    int contadorNode = 0;
+    Edge *minEdge = graph->getFirstNode()->getFirstEdge();
+    Node *aux;
+    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode(), contadorNode++)
+    {
+        node->setPosition(contadorNode);
+    }
+    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        {
+            if (edge < minEdge)
+            {
+                edge = minEdge;
+                aux = node;
+            }
+        }
+    }
+    minSpanningTree->insertEdge(aux->getId(), minEdge->getTargetId(), minEdge->getWeight());
+    no[aux->getId()] = 0;
+    no[minEdge->getTargetId()] = 0;
+    // Para i = 1,...,n faça
+    //     Se c(i,u) < c(i,v) então prox(i) <- u
+    //     Senão prox(i) <- v
+    // fim-para
+
+    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        do
+        {
+            min = node->getFirstEdge();
+
+        } while ();
+        for (Edge *aresta = node->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
+        {
+            if (minEdge->getWeight() > aresta->getWeight())
+            {
+                min = node->getFirstEdge();
+            }
+        }
+        node[node->getId()] = minEdge->getWeight();
+    }
+
+    /*
+    for (int i = 1; i < graph->getOrder(); i++)
+    {
+        if (Custo_entre_Nos(i, u) < Custo_entre_Nos(i, v))
+        {
+            prox[i] = u;
+        }
+        else
+        {
+            prox[i] = v;
+        }
+    }
+    // prox(u), prox(v) <- 0, contador <- 0
+    prox[u] = 0, prox[v] = 0;
+    int j = 0;
+    // Enquanto contador < n-2 faça
+    //     Seja j tal que prox(j)!=0 e c(j,prox(j)) é mínimo.
+    //     F <- F [UNIãO] {(j,prox(j))}
+    //     prox(j) <- 0
+    //     Para i = 1,...,n faça
+    //         Se prox(i) 1 0 e c(i,prox(i)) > c(i,j) então
+    //         prox(i) <- j
+    //     fim-para
+    //     contador <- contador + 1
+    // fim-enquanto
+    while (j < graph->GetOrder())
+    {
+        if (prox[j] != 0 && Custo_entre_Nos(j, prox[j]) é mínimo.)
+        {
+            minSpanningTree->insertNode(j->getPosition());
+            minSpanningTree->insertNode(prox[j]->getPosition());
+            prox[j] = 0;
+        }
+        for (int i = 1; i < graph->getOrder(); i++)
+        {
+            if (prox[i] != 0 && Custo_entre_Nos(i, prox[i]) > Custo_entre_Nos(i, j))
+            {
+                prox(i) = j;
+            }
+        }
+        j++;
+    }
+    */
+}
+
+void Graph::walk(Node *node)
+{
+    node->unchecks();
+    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
+    {
+        if (no->hasEdgeBetween(no->getId()))
+        {
+            if (!no->getChecks())
+            {
+                walk(no);
+            }
+        }
+    }
+}
+
+bool Graph::getConected()
+{
+    Node *first = this->first_node;
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        node->unchecks();
+    }
+
+    walk(first);
+
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        if (!node->getChecks())
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Funções da primeira etapa
