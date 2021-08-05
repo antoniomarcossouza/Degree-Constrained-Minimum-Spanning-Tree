@@ -53,7 +53,7 @@ public:
     Graph *agmKuskal(Graph *graph);
     Graph *agmPrim();
     void floydWarshall(ofstream &output_file);
-    float dijkstra(int idSource, int idTarget);
+    float dijkstra(ofstream &output_file, int idSource, int idTarget);
 
     //methods phase1
     float greed();

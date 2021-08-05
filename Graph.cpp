@@ -275,8 +275,62 @@ void Graph::floydWarshall(ofstream &output_file)
     }
 }
 
-float Graph::dijkstra(int idSource, int idTarget)
+float Graph::dijkstra(ofstream &output_file, int sourceId, int destinyId)
 {
+    // Cria uma matriz com a distancia de cada nó pros seus outros
+    int grafo[order][order];
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        {
+            Node *aux = getNode(edge->getTargetId());
+            grafo[node->getPosition()][aux->getPosition()] = edge->getWeight();
+        }
+    }
+
+    int distancia[order]; //Armazena a menor distância da origem pra cada vértice
+    bool aberto[order];   //Armazena se o vértice já foi visitado
+
+    //Inicializa todas as distâncias como infinito
+    for (int i = 0; i < order; i++)
+    {
+        distancia[i] = INF;
+        aberto[i] = true;
+    }
+
+    distancia[sourceId] = 0; // Define a distância da origem pra ele mesmo como 0
+
+    int minimo;
+    int minimoId;
+
+    for (int cont = 0; cont < order - 1; cont++)
+    {
+        //Encontra a menor distância
+        minimo = INF;
+
+        for (int i = 0; i < order; i++)
+        {
+            if (aberto[i] && distancia[i] <= minimo)
+            {
+                minimo = distancia[i];
+                minimoId = i;
+            }
+        }
+
+        //Fecha o vértice
+        aberto[minimoId] = false;
+
+        for (int i = 0; i < order; i++)
+        {
+            if (aberto[i] && grafo[minimoId][i] && distancia[minimoId] != INF && (distancia[minimoId] + grafo[minimoId][i] < distancia[i]))
+            {
+                distancia[i] = distancia[minimoId] + grafo[minimoId][i];
+            }
+        }
+    }
+
+    for (int i = 0; i < order; i++)
+        printf("%d \t\t %d\n", i, distancia[i]);
 }
 
 //function that prints a topological sorting
@@ -291,19 +345,20 @@ Graph *getVertexInduced(int *listIdNodes)
 {
 }
 
-Graph *agmKuskal(Graph *graph)
-{
-    Graph *graphKuskal = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
+// Graph *agmKuskal(Graph *graph)
+// {
+//     Graph *graphKuskal = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
 
-    list<Edge *> listEdge;
-    graph->father();
-    for (Edge *&arestaAux : listEdge)
-    {
-        if (!graph->cicle(arestaAux))
-        {
-        }
-    }
-}
+//     list<Edge *> listEdge;
+//     graph->father();
+//     for (Edge *&arestaAux : listEdge)
+//     {
+//         if (!graph->cicle(arestaAux))
+//         {
+//         }
+//     }
+// }
+
 Graph *agmPrim()
 {
 }
