@@ -312,20 +312,20 @@ Graph *agmKuskal(Graph *graph)
     return 0;
 }
 
-Graph *agmPrim(Graph *graph, ofstream &output_file)
+void Graph::agmPrim(ofstream &output_file)
 {
-    Graph *minSpanningTree = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
+    Graph *minSpanningTree = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
     typedef vector<tuple<int, int, int>> no;
     no tl;
 
-    Edge *minEdge = graph->getFirstNode()->getFirstEdge();
-    Node *aux;
+    Edge *minEdge = this->getFirstNode()->getFirstEdge();
+    Node *aux = this->getFirstNode();
 
-    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
+    for (Node *node = this->getFirstNode(); node != nullptr; node = node->getNextNode())
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
-            if (edge < minEdge)
+            if (edge->getWeight() < minEdge->getWeight())
             {
                 edge = minEdge;
                 aux = node;
@@ -336,12 +336,12 @@ Graph *agmPrim(Graph *graph, ofstream &output_file)
     minSpanningTree->insertEdge(aux->getId(), minEdge->getTargetId(), minEdge->getWeight());
     tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), 0));
 
-    for (int i = 0; i < graph->getOrder(); i++)
+    for (int i = 0; i < this->getOrder(); i++)
     {
         for (Node *node = minSpanningTree->getFirstNode(); node != nullptr; node = node->getNextNode())
         {
             minEdge = node->getFirstEdge();
-            for (Edge *aresta = graph->getNode(node->getId())->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
+            for (Edge *aresta = this->getNode(node->getId())->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
             {
                 if (get<2>(tl[minEdge->getTargetId()]) == 0 || (aresta->getWeight() < minEdge->getWeight() && get<2>(tl[aresta->getTargetId()]) != 0))
                 {
@@ -349,24 +349,29 @@ Graph *agmPrim(Graph *graph, ofstream &output_file)
                     aux = node;
                 }
             }
-            tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), minEdge->getWeight()));
+            if (minEdge != NULL)
+                tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), minEdge->getWeight()));
         }
-    }
 
-    int min = get<2>(tl[0]);
-    int idMin = 0;
-    for (int i = 0; i < tl.size(); i++)
-    {
-        if (get<2>(tl[i]) < min)
+        int min = 999999999;
+        int idMin = 0;
+
+        for (int i = 0; i < tl.size(); i++)
         {
-            min = get<2>(tl[i]);
-            idMin = i;
+            if (get<2>(tl[i]) < min && get<2>(tl[i]) != 0)
+            {
+                min = get<2>(tl[i]);
+                idMin = i;
+            }
         }
-    }
-    minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
-    tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), minEdge->getWeight());
 
-    return minSpanningTree;
+        cout << idMin << endl;
+        
+        minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
+        tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), 0);
+    }
+
+    cout << minSpanningTree->imprimir();
 }
 
 void Graph::walk(Node *node)
@@ -506,4 +511,44 @@ bool Graph::cicle(Edge *edge)
     else
         unites(aux1, aux2);
     return false;
+}
+
+string Graph::imprimir()
+{
+    stringstream stream;
+
+    stream << "graph imprimir {" << endl;
+    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
+    {
+        stream << "     " << no->getId();
+
+        if (no->getFirstEdge() != nullptr)
+            if (this->directed)
+                stream << " -> ";
+            else
+                stream << " -- ";
+
+        for (Edge *aresta = no->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
+        {
+            if (this->directed)
+            {
+                if (aresta->getNextEdge() != nullptr)
+                    stream << aresta->getTargetId() << " -> ";
+                else
+                    stream << aresta->getTargetId();
+            }
+            else
+            {
+                if (aresta->getNextEdge() != nullptr)
+                    stream << aresta->getTargetId() << " -- ";
+                else
+                    stream << aresta->getTargetId();
+            }
+        }
+        stream << endl;
+    }
+
+    stream << "}" << endl;
+
+    return stream.str();
 }

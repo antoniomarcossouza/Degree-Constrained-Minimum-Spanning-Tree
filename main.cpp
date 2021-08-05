@@ -186,7 +186,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         //Prim
         if (graph->getWeightedEdge() && !graph->getDirected() && graph->getConected())
         {
-            Graph *prim = graph->agmPrim(graph, output_file);
+            graph->agmPrim(output_file);
         }
         else
         {
