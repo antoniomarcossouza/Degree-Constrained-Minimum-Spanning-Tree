@@ -366,7 +366,7 @@ void Graph::agmPrim(ofstream &output_file)
         }
 
         cout << idMin << endl;
-        
+
         minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
         tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), 0);
     }
@@ -517,35 +517,20 @@ string Graph::imprimir()
 {
     stringstream stream;
 
+    int i = 0;
+
     stream << "graph imprimir {" << endl;
     for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
     {
-        stream << "     " << no->getId();
-
-        if (no->getFirstEdge() != nullptr)
-            if (this->directed)
-                stream << " -> ";
-            else
-                stream << " -- ";
-
+        if (no->getFirstEdge() == NULL)
+            stream << "    " << no->getId() << endl;
         for (Edge *aresta = no->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
         {
             if (this->directed)
-            {
-                if (aresta->getNextEdge() != nullptr)
-                    stream << aresta->getTargetId() << " -> ";
-                else
-                    stream << aresta->getTargetId();
-            }
+                stream << "    " << no->getId() << " -> " << aresta->getTargetId() << endl;
             else
-            {
-                if (aresta->getNextEdge() != nullptr)
-                    stream << aresta->getTargetId() << " -- ";
-                else
-                    stream << aresta->getTargetId();
-            }
+                stream << "    " << no->getId() << " -- " << aresta->getTargetId() << endl;
         }
-        stream << endl;
     }
 
     stream << "}" << endl;
