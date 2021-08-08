@@ -72,8 +72,8 @@ public:
 
 private:
     //Auxiliar methods
-    void transitivoDireto_Aux(vector<int> *no, Node *node);
-    void transitivoIndireto_Aux(vector<int> *no, Node *node, int id);
+    void transitivoDireto_Aux(Graph *graphTransitivo, Node *node);
+    void transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id);
 
     void unites(Node *x, Node *y);
     Node *find(Node *node);

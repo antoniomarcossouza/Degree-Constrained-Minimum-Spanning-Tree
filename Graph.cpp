@@ -413,63 +413,53 @@ bool Graph::getConected()
 
 void Graph::transitivoDireto(ofstream *arquivo_saida, int id)
 {
-    vector<int> no;
+
+    Graph *graphTransitivo = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
 
     Node *node = getNode(id);
-
     for (Edge *aresta = node->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
     {
-        if (!std::count(no.begin(), no.end(), node->getId()))
+        if (!graphTransitivo->searchNode(aresta->getTargetId()))
         {
-            no.push_back(aresta->getTargetId());
-            transitivoDireto_Aux(&no, getNode(aresta->getTargetId()));
+            graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
+            transitivoDireto_Aux(graphTransitivo, getNode(aresta->getTargetId()));
         }
     }
 
-    for (int i = 0; i < no.size(); i++)
-    {
-        *arquivo_saida << no[i] << " ";
-    }
+    *arquivo_saida << graphTransitivo->imprimir();
 }
 
-void Graph::transitivoDireto_Aux(vector<int> *no, Node *node)
+void Graph::transitivoDireto_Aux(Graph *graphTransitivo, Node *node)
 {
     for (Edge *aresta = node->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
     {
-        if (!std::count(no->begin(), no->end(), aresta->getTargetId()))
+        if (!graphTransitivo->searchNode(aresta->getTargetId()))
         {
-            no->push_back(aresta->getTargetId());
-            transitivoDireto_Aux(no, getNode(aresta->getTargetId()));
+            graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
+            transitivoDireto_Aux(graphTransitivo, getNode(aresta->getTargetId()));
         }
     }
 }
 
 void Graph::transitivoIndireto(ofstream *arquivo_saida, int id)
 {
-    vector<int> no;
-
+    Graph *graphTransitivo = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-    {
-        transitivoIndireto_Aux(&no, node, id);
-    }
+        transitivoIndireto_Aux(graphTransitivo, node, id);
 
-    for (int i = 0; i < no.size(); i++)
-    {
-        *arquivo_saida << no[i] << " ";
-    }
+    *arquivo_saida << graphTransitivo->imprimir();
 }
 
-void Graph::transitivoIndireto_Aux(vector<int> *no, Node *node, int id)
+void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
 {
     for (Edge *aresta = node->getFirstEdge(); aresta != NULL; aresta = aresta->getNextEdge())
     {
-        if (aresta->getTargetId() == id && (!std::count(no->begin(), no->end(), node->getId())))
+        if (aresta->getTargetId() == id)
         {
-            no->push_back(node->getId());
-            for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-            {
-                transitivoIndireto_Aux(no, node, node->getId());
-            }
+            graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
+            
+            for (Node *nodeAux = this->first_node; nodeAux != nullptr; nodeAux = nodeAux->getNextNode())
+                transitivoIndireto_Aux(graphTransitivo, nodeAux, node->getId());
         }
     }
 }
