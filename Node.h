@@ -24,7 +24,8 @@ private:
     int position;
     int father;
     //
-    bool check;
+    bool marca;
+
 
 public:
     // Constructor
@@ -59,10 +60,11 @@ public:
     // Auxiliar methods
     void setFather(int id);
     int getFather();
+    // void desmarca();
+    //void marca();
+    bool getMarca();
+    void setMarca(bool i);
 
-    bool getChecks();
-    void unchecks();
-    void getUnchecks();
 };
 
 #endif // NODE_H_INCLUDED

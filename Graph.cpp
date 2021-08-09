@@ -376,12 +376,12 @@ void Graph::agmPrim(ofstream &output_file)
 
 void Graph::walk(Node *node)
 {
-    node->unchecks();
+    node->setMarca(false);
     for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
     {
         if (no->hasEdgeBetween(no->getId()))
         {
-            if (!no->getChecks())
+            if (!no->getMarca())
             {
                 walk(no);
             }
@@ -394,14 +394,14 @@ bool Graph::getConected()
     Node *first = this->first_node;
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
-        node->unchecks();
+        node->setMarca(false);
     }
 
     walk(first);
 
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
-        if (!node->getChecks())
+        if (!node->getMarca())
         {
             return false;
         }
@@ -529,10 +529,10 @@ void Graph::unites(Node *x, Node *y)
 
 void Graph::percorre(Node * u)
 {
-    u->Marca();
-    for(Node *v = this->first_node; v != nullptr; v = v->getProx())
+    u->setMarca(true);
+    for(Node *v = this->first_node; v != nullptr; v = v->getNextNode())
     {
-        if(v->existeArestaEntre(u->getId()))
+        if(v->hasEdgeBetween(u->getId()))
         {
             if(!v->getMarca())
                 percorre(v);
@@ -543,13 +543,13 @@ void Graph::percorre(Node * u)
 bool Graph::cicle()
 {
     Node *node = this->first_node;
-    for (Node *no = this->first_node; no != nullptr; no = no->getProx())
-        i->desmarca();
+    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
+        no->setMarca(false);
     percorre(node);
-    for (Node *no = this->first_node; no != nullptr; no = no->getProx())
+    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
         if (!no->getMarca())
             return false;
-    return true
+    return true;
 }
 
 string Graph::imprimir()

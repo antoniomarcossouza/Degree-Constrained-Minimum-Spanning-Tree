@@ -26,6 +26,7 @@ private:
     Node *first_node;
     Node *last_node;
 
+
 public:
     //Constructor
     Graph(int order, bool directed, bool weighted_edge, bool weighted_node);
@@ -81,6 +82,7 @@ private:
     void unites(Node *x, Node *y);
     Node *find(Node *node);
     void walk(Node *node);
+    void percorre(Node *node);
 };
 
 #endif // GRAPH_H_INCLUDED

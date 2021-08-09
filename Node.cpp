@@ -249,15 +249,12 @@ int Node::getFather()
     return this->father;
 }
 
-bool No::getMarca()
+bool Node::getMarca()
 {
     return marca;
 }
-void No::Marca()
+
+void Node::setMarca(bool i) 
 {
-    marca=true;
-}
-void No::desmarca()
-{
-    marca=false;
+    marca = i;
 }
