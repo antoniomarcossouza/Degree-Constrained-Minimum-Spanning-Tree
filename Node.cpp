@@ -241,10 +241,23 @@ int Node::getPosition()
 
 void Node::setFather(int id)
 {
-    this->father= id;
+    this->father = id;
 }
 
 int Node::getFather()
 {
     return this->father;
+}
+
+bool Node::getChecks()
+{
+    return check;
+}
+void Node::unchecks()
+{
+    check = true;
+}
+void Node::getUnchecks()
+{
+    check = false;
 }

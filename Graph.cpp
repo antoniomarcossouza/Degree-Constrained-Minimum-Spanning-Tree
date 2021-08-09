@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
+#include <tuple>
 
 #define INF 99999
 
@@ -220,7 +221,7 @@ void Graph::floydWarshall(ofstream &output_file)
     int contadorNode = 0;
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode(), contadorNode++)
     {
-        node->setPosition(contadorNode);
+        node->setPosition(contadorNode); // Seta a posição dos nós
     }
 
     for (int i = 0; i < order; i++)
@@ -239,6 +240,7 @@ void Graph::floydWarshall(ofstream &output_file)
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
+            // Itera por todos as arestas, colocando o peso como a distância entre os 2 nós
             Node *aux = getNode(edge->getTargetId());
             dist[node->getPosition()][aux->getPosition()] = edge->getWeight();
         }
@@ -250,6 +252,7 @@ void Graph::floydWarshall(ofstream &output_file)
         {
             for (int j = 0; j < order; j++)
             {
+                // Coloca a menor distância entre os nós restantes
                 if (dist[i][j] > dist[i][k] + dist[k][j])
                 {
                     dist[i][j] = dist[i][k] + dist[k][j];
@@ -263,6 +266,7 @@ void Graph::floydWarshall(ofstream &output_file)
         output_file << endl;
         for (int j = 0; j < order; j++)
         {
+            // Output
             if (dist[i][j] == INF)
             {
                 output_file << " INF ";
@@ -277,6 +281,7 @@ void Graph::floydWarshall(ofstream &output_file)
 
 float Graph::dijkstra(int idSource, int idTarget)
 {
+    return 0;
 }
 
 //function that prints a topological sorting
@@ -289,6 +294,7 @@ void breadthFirstSearch(ofstream &output_file)
 }
 Graph *getVertexInduced(int *listIdNodes)
 {
+    return 0;
 }
 
 Graph *agmKuskal(Graph *graph)
@@ -303,72 +309,157 @@ Graph *agmKuskal(Graph *graph)
         {
         }
     }
+    return 0;
 }
-Graph *agmPrim()
+
+void Graph::agmPrim(ofstream &output_file)
 {
+    Graph *minSpanningTree = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
+    typedef vector<tuple<int, int, int>> no;
+    no tl;
+
+    Edge *minEdge = this->getFirstNode()->getFirstEdge();
+    Node *aux = this->getFirstNode();
+
+    for (Node *node = this->getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        {
+            if (edge->getWeight() < minEdge->getWeight())
+            {
+                edge = minEdge;
+                aux = node;
+            }
+        }
+    }
+
+    minSpanningTree->insertEdge(aux->getId(), minEdge->getTargetId(), minEdge->getWeight());
+    tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), 0));
+
+    for (int i = 0; i < this->getOrder(); i++)
+    {
+        for (Node *node = minSpanningTree->getFirstNode(); node != nullptr; node = node->getNextNode())
+        {
+            minEdge = node->getFirstEdge();
+            for (Edge *aresta = this->getNode(node->getId())->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
+            {
+                if (get<2>(tl[minEdge->getTargetId()]) == 0 || (aresta->getWeight() < minEdge->getWeight() && get<2>(tl[aresta->getTargetId()]) != 0))
+                {
+                    minEdge = aresta;
+                    aux = node;
+                }
+            }
+            if (minEdge != NULL)
+                tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), minEdge->getWeight()));
+        }
+
+        int min = 999999999;
+        int idMin = 0;
+
+        for (int i = 0; i < tl.size(); i++)
+        {
+            if (get<2>(tl[i]) < min && get<2>(tl[i]) != 0)
+            {
+                min = get<2>(tl[i]);
+                idMin = i;
+            }
+        }
+
+        cout << idMin << endl;
+
+        minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
+        tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), 0);
+    }
+
+    cout << minSpanningTree->imprimir();
+}
+
+void Graph::walk(Node *node)
+{
+    node->unchecks();
+    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
+    {
+        if (no->hasEdgeBetween(no->getId()))
+        {
+            if (!no->getChecks())
+            {
+                walk(no);
+            }
+        }
+    }
+}
+
+bool Graph::getConected()
+{
+    Node *first = this->first_node;
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        node->unchecks();
+    }
+
+    walk(first);
+
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        if (!node->getChecks())
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Funções da primeira etapa
 
 void Graph::transitivoDireto(ofstream &output_file, int id)
 {
-    vector<int> no;
+
+    Graph *graphTransitivo = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
 
     Node *node = getNode(id);
-
     for (Edge *aresta = node->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
     {
-        if (!std::count(no.begin(), no.end(), node->getId()))
+        if (!graphTransitivo->searchNode(aresta->getTargetId()))
         {
-            no.push_back(aresta->getTargetId());
-            transitivoDireto_Aux(&no, getNode(aresta->getTargetId()));
+            graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
+            transitivoDireto_Aux(graphTransitivo, getNode(aresta->getTargetId()));
         }
     }
 
-    for (int i = 0; i < no.size(); i++)
-    {
-        output_file << no[i] << " ";
-    }
+    *arquivo_saida << graphTransitivo->imprimir();
 }
 
-void Graph::transitivoDireto_Aux(vector<int> *no, Node *node)
+void Graph::transitivoDireto_Aux(Graph *graphTransitivo, Node *node)
 {
     for (Edge *aresta = node->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
     {
-        if (!std::count(no->begin(), no->end(), aresta->getTargetId()))
+        if (!graphTransitivo->searchNode(aresta->getTargetId()))
         {
-            no->push_back(aresta->getTargetId());
-            transitivoDireto_Aux(no, getNode(aresta->getTargetId()));
+            graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
+            transitivoDireto_Aux(graphTransitivo, getNode(aresta->getTargetId()));
         }
     }
 }
 
 void Graph::transitivoIndireto(ofstream &output_file, int id)
 {
-    vector<int> no;
-
+    Graph *graphTransitivo = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-    {
-        transitivoIndireto_Aux(&no, node, id);
-    }
+        transitivoIndireto_Aux(graphTransitivo, node, id);
 
-    for (int i = 0; i < no.size(); i++)
-    {
-        output_file << no[i] << " ";
-    }
+    *arquivo_saida << graphTransitivo->imprimir();
 }
 
-void Graph::transitivoIndireto_Aux(vector<int> *no, Node *node, int id)
+void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
 {
     for (Edge *aresta = node->getFirstEdge(); aresta != NULL; aresta = aresta->getNextEdge())
     {
-        if (aresta->getTargetId() == id && (!std::count(no->begin(), no->end(), node->getId())))
+        if (aresta->getTargetId() == id)
         {
-            no->push_back(node->getId());
-            for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-            {
-                transitivoIndireto_Aux(no, node, node->getId());
-            }
+            graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
+            
+            for (Node *nodeAux = this->first_node; nodeAux != nullptr; nodeAux = nodeAux->getNextNode())
+                transitivoIndireto_Aux(graphTransitivo, nodeAux, node->getId());
         }
     }
 }
@@ -447,4 +538,29 @@ bool Graph::cicle(Edge *edge)
     else
         unites(aux1, aux2);
     return false;
+}
+
+string Graph::imprimir()
+{
+    stringstream stream;
+
+    int i = 0;
+
+    stream << "graph imprimir {" << endl;
+    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
+    {
+        if (no->getFirstEdge() == NULL)
+            stream << "    " << no->getId() << endl;
+        for (Edge *aresta = no->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
+        {
+            if (this->directed)
+                stream << "    " << no->getId() << " -> " << aresta->getTargetId() << endl;
+            else
+                stream << "    " << no->getId() << " -- " << aresta->getTargetId() << endl;
+        }
+    }
+
+    stream << "}" << endl;
+
+    return stream.str();
 }

@@ -51,7 +51,7 @@ public:
     void breadthFirstSearch(ofstream &output_file);
     Graph *getVertexInduced(int *listIdNodes);
     Graph *agmKuskal(Graph *graph);
-    Graph *agmPrim();
+    void agmPrim(ofstream &output_file);
     void floydWarshall(ofstream &output_file);
     float dijkstra(int idSource, int idTarget);
 
@@ -67,16 +67,20 @@ public:
 
     void father();
     bool cicle(Edge *edge);
+    bool getConected();
+
+    string imprimir();
 
 private:
     //Auxiliar methods
-    void transitivoDireto_Aux(vector<int> *no, Node *node);
-    void transitivoIndireto_Aux(vector<int> *no, Node *node, int id);
+    void transitivoDireto_Aux(Graph *graphTransitivo, Node *node);
+    void transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id);
 
     void ordenacaoTopologica_Aux(vector<int> *no, int in[]);
 
     void unites(Node *x, Node *y);
     Node *find(Node *node);
+    void walk(Node *node);
 };
 
 #endif // GRAPH_H_INCLUDED
