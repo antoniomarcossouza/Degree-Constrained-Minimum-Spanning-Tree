@@ -19,9 +19,9 @@ class Edge{
 
     public:
         // Constructors
-        Edge(int target_id);
-        Edge(int target_id, float weight);
-        Edge(int target_id, int id_origem, float weight);
+        // Edge(int target_id);
+        Edge(int id_origem, int target_id);
+        Edge(int id_origem, int target_id, float weight);
         // Destructor
         ~Edge();
         // Getters

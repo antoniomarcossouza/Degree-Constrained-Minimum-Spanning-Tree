@@ -10,22 +10,17 @@ using namespace std;
 // Constructors
 
 
-Edge::Edge(int target_id){
+Edge::Edge(int id, int target_id){
 
+    this->id_origem = id;
     this->target_id = target_id;
     this->next_edge = nullptr;
     this->weight = 0;
 
 }
 
-Edge::Edge(int target_id, float weight)
-{
-    this->target_id = target_id;
-    this->next_edge = nullptr;
-    this->weight = weight;
-}
 
-Edge::Edge(int target_id,int id_origem, float weight)
+Edge::Edge(int id_origem, int target_id, float weight)
 {
     this->target_id = target_id;
     this->id_origem = id_origem;

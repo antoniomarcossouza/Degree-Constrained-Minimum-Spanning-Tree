@@ -127,14 +127,14 @@ void Graph::insertEdge(int id, int target_id, float weight)
     {
         Node *no = getNode(id);
         Node *no_alvo = getNode(target_id);
-        no->insertEdge(target_id, weight);
+        no->insertEdge(id, target_id, weight);
         no->incrementInDegree();
         no_alvo->incrementOutDegree();
     }
     else
     {
         Node *no = getNode(id);
-        no->insertEdge(target_id, weight);
+        no->insertEdge(id, target_id, weight);
         no->incrementInDegree();
     }
 }
@@ -354,7 +354,7 @@ struct ListaArestaComparator
     }
 };
 
-Graph *Graph::agmKruskal(Graph *graph)
+Graph *Graph::agmKruskal(Graph *graph, ofstream &output_file)
 {
     cout << "Chegou aqui 1!" << endl;
     Graph *graphKruskal = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
@@ -434,8 +434,8 @@ Graph *Graph::agmKruskal(Graph *graph)
 
     // imprimindo no arquivo
     
-    //output_file << "Custo total: ";
-    //output_file << pesoSolucao << endl;
+    output_file << "Custo total: ";
+    output_file << pesoSolucao << endl;
 }
 
 Graph *agmPrim()

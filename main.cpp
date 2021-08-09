@@ -196,7 +196,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         } 
         cout << "Algoritmo de Kruskal selecionado!" << endl;
 
-        graph->agmKruskal(graph);
+        graph->agmKruskal(graph, output_file);
         break;
     }
     case 7:
