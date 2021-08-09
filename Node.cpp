@@ -249,15 +249,15 @@ int Node::getFather()
     return this->father;
 }
 
-bool Node::getChecks()
+bool No::getMarca()
 {
-    return check;
+    return marca;
 }
-void Node::unchecks()
+void No::Marca()
 {
-    check = true;
+    marca=true;
 }
-void Node::getUnchecks()
+void No::desmarca()
 {
-    check = false;
+    marca=false;
 }

@@ -303,7 +303,7 @@ Graph *agmKuskal(Graph *graph)
 
     list<Edge *> listEdge;
     graph->father();
-   /* for (Edge *&arestaAux : listEdge)
+    /* for (Edge *&arestaAux : listEdge)
     {
         if (!graph->cicle(arestaAux))
         {
@@ -527,29 +527,29 @@ void Graph::unites(Node *x, Node *y)
     xraiz->setFather(yraiz->getId());
 }
 
-bool Graph::cicle()
+void Graph::percorre(Node * u)
 {
-    bool *vis = new bool[this->order];
-    int contador;
-    
-    
-    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    u->Marca();
+    for(Node *v = this->first_node; v != nullptr; v = v->getProx())
     {
-        contador = 0;
-        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        if(v->existeArestaEntre(u->getId()))
         {
-            vis[contador] = false;
-            contador++;
-        }
-        contador = 0;
-        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
-        {
-             if (!vis[contador])
-                return false;
-            contador++;
+            if(!v->getMarca())
+                percorre(v);
         }
     }
-    return true;
+}
+
+bool Graph::cicle()
+{
+    Node *node = this->first_node;
+    for (Node *no = this->first_node; no != nullptr; no = no->getProx())
+        i->desmarca();
+    percorre(node);
+    for (Node *no = this->first_node; no != nullptr; no = no->getProx())
+        if (!no->getMarca())
+            return false;
+    return true
 }
 
 string Graph::imprimir()
