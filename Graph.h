@@ -66,7 +66,7 @@ public:
     void ordenacaoTopologica(ofstream &output_file);
 
     void father();
-    bool cicle(Edge *edge);
+    bool cicle();
     bool getConected();
 
     string imprimir();

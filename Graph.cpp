@@ -303,12 +303,12 @@ Graph *agmKuskal(Graph *graph)
 
     list<Edge *> listEdge;
     graph->father();
-    for (Edge *&arestaAux : listEdge)
+   /* for (Edge *&arestaAux : listEdge)
     {
         if (!graph->cicle(arestaAux))
         {
         }
-    }
+    }*/
     return 0;
 }
 
@@ -426,7 +426,7 @@ void Graph::transitivoDireto(ofstream &output_file, int id)
         }
     }
 
-    arquivo_saida << graphTransitivo->imprimir();
+    output_file << graphTransitivo->imprimir();
 }
 
 void Graph::transitivoDireto_Aux(Graph *graphTransitivo, Node *node)
@@ -447,7 +447,7 @@ void Graph::transitivoIndireto(ofstream &output_file, int id)
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         transitivoIndireto_Aux(graphTransitivo, node, id);
 
-    arquivo_saida << graphTransitivo->imprimir();
+    output_file << graphTransitivo->imprimir();
 }
 
 void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
@@ -527,24 +527,26 @@ void Graph::unites(Node *x, Node *y)
     xraiz->setFather(yraiz->getId());
 }
 
-bool Graph::cicle(Edge *edge)
+bool Graph::cicle()
 {
     bool *vis = new bool[this->order];
-    int i = 0;
-
+    int contador;
+    
+    
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
-        int = 0;
+        contador = 0;
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
-            vis[i] = false;
-            i++;
+            vis[contador] = false;
+            contador++;
         }
+        contador = 0;
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
-             if (!vis[i])
+             if (!vis[contador])
                 return false;
-            i++;
+            contador++;
         }
     }
     return true;
