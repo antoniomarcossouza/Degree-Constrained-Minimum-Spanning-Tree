@@ -426,7 +426,7 @@ void Graph::transitivoDireto(ofstream &output_file, int id)
         }
     }
 
-    *arquivo_saida << graphTransitivo->imprimir();
+    arquivo_saida << graphTransitivo->imprimir();
 }
 
 void Graph::transitivoDireto_Aux(Graph *graphTransitivo, Node *node)
@@ -447,7 +447,7 @@ void Graph::transitivoIndireto(ofstream &output_file, int id)
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         transitivoIndireto_Aux(graphTransitivo, node, id);
 
-    *arquivo_saida << graphTransitivo->imprimir();
+    arquivo_saida << graphTransitivo->imprimir();
 }
 
 void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
@@ -457,7 +457,7 @@ void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
         if (aresta->getTargetId() == id)
         {
             graphTransitivo->insertEdge(node->getId(), aresta->getTargetId(), aresta->getWeight());
-            
+
             for (Node *nodeAux = this->first_node; nodeAux != nullptr; nodeAux = nodeAux->getNextNode())
                 transitivoIndireto_Aux(graphTransitivo, nodeAux, node->getId());
         }
@@ -529,15 +529,25 @@ void Graph::unites(Node *x, Node *y)
 
 bool Graph::cicle(Edge *edge)
 {
+    bool *vis = new bool[this->order];
+    int i = 0;
 
-    Node *aux1 = getNode(edge->getTargetId());
-    Node *aux2 = getNode(edge->getTargetId());
-
-    if (find(aux1) == find(aux2))
-        return true;
-    else
-        unites(aux1, aux2);
-    return false;
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        int = 0;
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        {
+            vis[i] = false;
+            i++;
+        }
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        {
+             if (!vis[i])
+                return false;
+            i++;
+        }
+    }
+    return true;
 }
 
 string Graph::imprimir()
