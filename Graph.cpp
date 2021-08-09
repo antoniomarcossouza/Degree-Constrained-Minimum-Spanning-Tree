@@ -376,12 +376,12 @@ void Graph::agmPrim(ofstream &output_file)
 
 void Graph::walk(Node *node)
 {
-    node->setMarca(false);
+    node->setCheck(false);
     for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
     {
         if (no->hasEdgeBetween(no->getId()))
         {
-            if (!no->getMarca())
+            if (!no->getCheck())
             {
                 walk(no);
             }
@@ -389,19 +389,19 @@ void Graph::walk(Node *node)
     }
 }
 
-bool Graph::getConected()
+bool Graph::isConnected()
 {
     Node *first = this->first_node;
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
-        node->setMarca(false);
+        node->setCheck(false);
     }
 
     walk(first);
 
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
-        if (!node->getMarca())
+        if (!node->getCheck())
         {
             return false;
         }
@@ -527,14 +527,14 @@ void Graph::unites(Node *x, Node *y)
     xraiz->setFather(yraiz->getId());
 }
 
-void Graph::percorre(Node * u)
+void Graph::percorre(Node *u)
 {
-    u->setMarca(true);
-    for(Node *v = this->first_node; v != nullptr; v = v->getNextNode())
+    u->setCheck(true);
+    for (Node *v = this->first_node; v != nullptr; v = v->getNextNode())
     {
-        if(v->hasEdgeBetween(u->getId()))
+        if (v->hasEdgeBetween(u->getId()))
         {
-            if(!v->getMarca())
+            if (!v->getCheck())
                 percorre(v);
         }
     }
@@ -544,10 +544,10 @@ bool Graph::cicle()
 {
     Node *node = this->first_node;
     for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
-        no->setMarca(false);
+        no->setCheck(false);
     percorre(node);
     for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
-        if (!no->getMarca())
+        if (!no->getCheck())
             return false;
     return true;
 }

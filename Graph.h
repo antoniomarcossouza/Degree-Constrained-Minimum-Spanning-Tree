@@ -68,7 +68,7 @@ public:
 
     void father();
     bool cicle();
-    bool getConected();
+    bool isConnected();
 
     string imprimir();
 

@@ -24,7 +24,7 @@ private:
     int position;
     int father;
     //
-    bool marca;
+    bool check;
 
 
 public:
@@ -60,10 +60,8 @@ public:
     // Auxiliar methods
     void setFather(int id);
     int getFather();
-    // void desmarca();
-    //void marca();
-    bool getMarca();
-    void setMarca(bool i);
+    bool getCheck();
+    void setCheck(bool i);
 
 };
 
