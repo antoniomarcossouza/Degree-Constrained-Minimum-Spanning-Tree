@@ -52,7 +52,7 @@ public:
     void decrementInDegree();
     Edge *hasEdgeBetween(int target_id);
 
-    int setIndexSearch(int i);
+    void setIndexSearch(int i);
     int getIndexSearch();
 
     void setPosition(int position);

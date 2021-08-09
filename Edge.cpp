@@ -63,17 +63,17 @@ float Edge::getWeight(){
 
 }
 
- int getIdOrigem() {
+ int Edge::getIdOrigem() {
      return this->id_origem;
  }
 
 // Setters
 
- void setTargetId(int id) {
+ void Edge::setTargetId(int id) {
      this->target_id = id;
  }
 
- void setIdOrigem(int id) {
+ void Edge::setIdOrigem(int id) {
      this->id_origem = id;
  }
 

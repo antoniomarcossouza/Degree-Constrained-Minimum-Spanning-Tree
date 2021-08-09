@@ -48,8 +48,9 @@ public:
     Node *getNode(int id);
 
     //methods phase1
+    void imprimeListaAdjacencia(ofstream &output_file);
     void topologicalSorting();
-    void breadthFirstSearch(ofstream &output_file);
+    void breadthFirstSearch(int v, fstream &output_file);
     Graph *getVertexInduced(int *listIdNodes);
     Graph *agmKruskal(Graph *graph);
     Graph *agmPrim();
@@ -64,7 +65,8 @@ public:
     //primeira etapa
     void transitivoDireto(ofstream *arquivo_saida, int id);
     void transitivoIndireto(ofstream *arquivo_saida, int id);
-    void depthFirstSearchAux(Node* node, bool* visitados,fstream &outputFile)
+    void depthFirstSearch(int v, ofstream &output_file);
+    void depthFirstSearchAux(Node* node, bool* visitados,ofstream &outputFile);
     void father();
     bool cicle(Edge *edge);
     void imprimeFile(ofstream *arquivo_saida); // kruskal

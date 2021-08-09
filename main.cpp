@@ -117,6 +117,8 @@ int menu()
     cout << "[4] Caminho Mínimo entre dois vértices - Floyd" << endl;
     cout << "[5] Árvore Geradora Mínima de Prim" << endl;
     cout << "[6] Árvore Geradora Mínima de Kruskal" << endl;
+    cout << "[7] Busca em Profundidade, destacando Arestas de retorno" << endl;
+    cout << "[8] Imprimir por Lista de Adjacencia" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -188,17 +190,37 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 6:
     {
+        if(!graph->getDirected()) {
+            cout << "Erro: O Algoritmo de Kruskal exige que as arestas sejam ponderadas!" << endl;
+            break;
+        } 
+        cout << "Algoritmo de Kruskal selecionado!" << endl;
 
+        graph->agmKruskal(graph);
         break;
     }
     case 7:
-    {
+    {   
+        if(graph->getOrder() == 0) {
+            cout << "Erro: O algoritmo de DFS precisa de vertices para executar!";
+            break;
+        }
+        cout << "Busca em Profundidade selecionada!" << endl;
+        int id;
+        cout << "Infome um ID inicial: " << endl;
+        cin >> id;
 
+        graph->depthFirstSearch(id,output_file);
         break;
     }
     case 8:
     {
-
+        if(graph->getOrder() == 0) {
+            cout << "O grafo eh nulo!";
+            break;
+        }
+        cout << "Impressao por Lista de Adjacencia:" << endl;
+        graph->imprimeListaAdjacencia(output_file);
         break;
     }
     default:
