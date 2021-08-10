@@ -467,22 +467,27 @@ void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
 void Graph::ordenacaoTopologica(ofstream &output_file)
 {
     vector<int> no;
-    int in[order];
+    int in[order + 1];
+
+    for (int i = 0; i < order + 1; i++)
+        in[i] = -1;
 
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-        in[node->getId()] = node->getInDegree();
+        in[node->getId()] = node->getOutDegree();
 
     ordenacaoTopologica_Aux(&no, in);
 
-    for (int i = 0; i < no.size(); i++)
-        output_file << no[i] << " ";
+    if (no.size() > 0)
+        output_file << no[0];
+    for (int i = 1; i < no.size(); i++)
+        output_file << " -> " << no[i];
 }
 
 void Graph::ordenacaoTopologica_Aux(vector<int> *no, int in[])
 {
     if (no->size() != order)
     {
-        for (int i = 0; i < order; i++)
+        for (int i = 0; i < order + 1; i++)
         {
             if (in[i] == 0)
             {

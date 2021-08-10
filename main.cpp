@@ -209,7 +209,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     }
     case 8:
     {
-        if (graph->getDirected())
+        if (graph->getDirected() && !graph->cicle())
         {
             graph->ordenacaoTopologica(output_file);
         }
@@ -279,9 +279,7 @@ int main(int argc, char const *argv[])
     else
         cout << "Unable to open " << argv[1];
 
-    //mainMenu(output_file, graph);
-    if (graph->cicle())
-        cout << "DEU" << endl;
+    mainMenu(output_file, graph);
 
     //Fechando arquivo de entrada
     input_file.close();
