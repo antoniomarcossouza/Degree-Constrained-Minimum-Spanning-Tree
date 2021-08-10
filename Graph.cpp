@@ -293,7 +293,7 @@ float Graph::dijkstra(ofstream &output_file, int sourceId, int destinyId)
         {
             Node *aux = getNode(edge->getTargetId());
             grafo[node->getPosition()][aux->getPosition()] = edge->getWeight();
-            // cout << edge->getWeight() << endl;
+            cout << edge->getWeight() << endl;
         }
     }
     // for (int i = 0; i < order; i++)
@@ -346,10 +346,10 @@ float Graph::dijkstra(ofstream &output_file, int sourceId, int destinyId)
         }
     }
 
-    // for (int i = 0; i < order; i++)
-    //     printf("%d \t\t %d\n", i, distancia[i]);
+    for (int i = 0; i < order; i++)
+        printf("%d \t\t %d\n", i, distancia[i]);
 
-    output_file << "Distancia ate o no " << destinyId << ": " << distancia[destinyId];
+    //output_file << "Distancia ate o no " << destinyId << ": " << distancia[destinyId];
 }
 
 //function that prints a topological sorting
