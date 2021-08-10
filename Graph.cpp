@@ -471,7 +471,6 @@ Graph *Graph::agmKruskal(Graph *graph, ofstream &output_file)
     output_file << graphKruskal->imprimir();
 }
 
-// Funções da primeira etapa
 void Graph::agmPrim(ofstream &output_file)
 {
     Graph *minSpanningTree = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
@@ -479,7 +478,6 @@ void Graph::agmPrim(ofstream &output_file)
     no tl;
 
     Edge *minEdge = this->getFirstNode()->getFirstEdge();
-    Node *aux = this->getFirstNode();
 
     for (Node *node = this->getFirstNode(); node != nullptr; node = node->getNextNode())
     {
@@ -487,30 +485,28 @@ void Graph::agmPrim(ofstream &output_file)
         {
             if (edge->getWeight() < minEdge->getWeight())
             {
-                edge = minEdge;
-                aux = node;
+                minEdge = edge;
             }
         }
     }
 
-    minSpanningTree->insertEdge(aux->getId(), minEdge->getTargetId(), minEdge->getWeight());
-    tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), 0));
+    minSpanningTree->insertEdge(minEdge->getIdOrigem(), minEdge->getTargetId(), minEdge->getWeight());
+    tl.push_back(tuple<int, int, int>(minEdge->getIdOrigem(), minEdge->getTargetId(), 0));
 
     for (int i = 0; i < this->getOrder(); i++)
     {
         for (Node *node = minSpanningTree->getFirstNode(); node != nullptr; node = node->getNextNode())
         {
             minEdge = node->getFirstEdge();
-            for (Edge *aresta = this->getNode(node->getId())->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
+            for (Edge *edge = this->getNode(node->getId())->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
             {
-                if (get<2>(tl[minEdge->getTargetId()]) == 0 || (aresta->getWeight() < minEdge->getWeight() && get<2>(tl[aresta->getTargetId()]) != 0))
+                if (get<2>(tl[minEdge->getIdOrigem()]) == 0 || (edge->getWeight() < minEdge->getWeight() && get<2>(tl[edge->getIdOrigem()]) != 0))
                 {
-                    minEdge = aresta;
-                    aux = node;
+                    minEdge = edge;
                 }
             }
             if (minEdge != NULL)
-                tl.push_back(tuple<int, int, int>(aux->getId(), minEdge->getTargetId(), minEdge->getWeight()));
+                tl.push_back(tuple<int, int, int>(minEdge->getIdOrigem(), minEdge->getTargetId(), minEdge->getWeight()));
         }
 
         int min = 999999999;
@@ -524,8 +520,6 @@ void Graph::agmPrim(ofstream &output_file)
                 idMin = i;
             }
         }
-
-        cout << idMin << endl;
 
         minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
         tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), 0);
@@ -585,7 +579,6 @@ void Graph::transitivoDireto(ofstream &output_file, int id)
             transitivoDireto_Aux(graphTransitivo, getNode(aresta->getTargetId()));
         }
     }
-
     output_file << graphTransitivo->imprimir();
 }
 
@@ -666,19 +659,24 @@ string Graph::imprimir()
 {
     stringstream stream;
 
-    int i = 0;
+    if (directed)
+        stream << "digraph imprimir {" << endl;
+    else
+        stream << "graph imprimir {" << endl;
 
-    stream << "graph imprimir {" << endl;
+    for (Node *aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
+    {
+        stream << "    " << aux->getId() << ";" << endl;
+    }
+
     for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
     {
-        if (no->getFirstEdge() == NULL)
-            stream << "    " << no->getId() << endl;
         for (Edge *aresta = no->getFirstEdge(); aresta != nullptr; aresta = aresta->getNextEdge())
         {
             if (this->directed)
-                stream << "    " << no->getId() << " -> " << aresta->getTargetId() << endl;
+                stream << "    " << no->getId() << " -> " << aresta->getTargetId() << ";" << endl;
             else
-                stream << "    " << no->getId() << " -- " << aresta->getTargetId() << endl;
+                stream << "    " << no->getId() << " -- " << aresta->getTargetId() << ";" << endl;
         }
     }
 
