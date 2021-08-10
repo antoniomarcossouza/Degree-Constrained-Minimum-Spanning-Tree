@@ -128,14 +128,14 @@ void Graph::insertEdge(int id, int target_id, float weight)
     {
         Node *no = getNode(id);
         Node *no_alvo = getNode(target_id);
-        no->insertEdge(target_id, weight);
+        no->insertEdge(id, target_id, weight);
         no->incrementInDegree();
         no_alvo->incrementOutDegree();
     }
     else
     {
         Node *no = getNode(id);
-        no->insertEdge(target_id, weight);
+        no->insertEdge(id, target_id, weight);
         no->incrementInDegree();
     }
 }
@@ -209,10 +209,6 @@ Node *Graph::getNode(int id)
 }
 
 //Function that prints a set of edges belongs breadth tree
-
-void Graph::breadthFirstSearch(ofstream &output_file)
-{
-}
 
 void Graph::floydWarshall(ofstream &output_file)
 {
@@ -330,29 +326,152 @@ void Graph::topologicalSorting_aux(vector<int> *no, int in[])
     }
 }
 
-void breadthFirstSearch(ofstream &output_file)
+void Graph::depthFirstSearch(int v, ofstream &output_file)
+{
+
+    Node *node = this->first_node;          // no aponta para primeiro no
+    bool *visitados = new bool[getOrder()]; // vetor para verificar os nós visitados
+
+    for (int i = 0; i < getOrder(); i++)
+    {
+        node->setIndexSearch(i);    // setando indice de busca dos nós
+        visitados[i] = 0;           // setando indice visitados como false
+        node = node->getNextNode(); // percorrendo todos os nós
+    }
+
+    node = getNode(v); // buscando o nó no grafo
+
+    if (node == nullptr)
+    { // checando a presença do nó no grafo
+
+        output_file << "Erro de busca: No não encontrado!" << endl;
+    }
+    else
+    {
+
+        depthFirstSearchAux(node, visitados, output_file);
+    }
+
+    delete[] visitados; // desalocando vetor de visitados
+}
+
+void Graph::breadthFirstSearch(int v, fstream &output_file)
 {
 }
+
+void Graph::depthFirstSearchAux(Node *node, bool *visitados, ofstream &output_file)
+{
+
+    output_file << "\n*** Visitando o no '" << node->getId() << "':" << endl;
+    visitados[node->getIndexSearch()] = 1; // marcando como vistado
+
+    Edge *edge = node->getFirstEdge();
+
+    while (edge != nullptr)
+    {
+        Node *aux = getNode(edge->getTargetId());
+
+        if (visitados[aux->getIndexSearch()] == 0)
+        {
+
+            output_file << "(v) Avanco: (" << node->getId() << " , " << aux->getId() << ")" << endl;
+
+            depthFirstSearchAux(aux, visitados, output_file);
+        }
+        else
+        {
+            output_file << "(x) Retorno: (" << node->getId() << " , " << aux->getId() << ")" << endl;
+        }
+        edge = edge->getNextEdge();
+    }
+}
+
 Graph *getVertexInduced(int *listIdNodes)
 {
     return 0;
 }
 
-Graph *agmKuskal(Graph *graph)
+struct ListaArestaComparator
 {
-    Graph *graphKuskal = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
-
-    list<Edge *> listEdge;
-    graph->father();
-    /* for (Edge *&arestaAux : listEdge)
+    // Compara 2 Arestas usando Peso
+    bool operator()(Edge *&edge1, Edge *&edge2)
     {
-        if (!graph->cicle(arestaAux))
+        if (edge1->getWeight() == edge2->getWeight())
+            return edge1 < edge2;
+        return edge1->getWeight() < edge2->getWeight();
+    }
+};
+
+Graph *Graph::agmKruskal(Graph *graph, ofstream &output_file)
+{
+    Graph *graphKruskal = new Graph(graph->getOrder(), graph->getDirected(), graph->getWeightedEdge(), graph->getWeightedNode());
+
+    // preenchendo lista de arestas
+    list<Edge *> listEdgesAux;
+    list<Edge *> listEdgesFinal;
+
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
+            listEdgesAux.push_back(edge);
         }
-    }*/
-    return 0;
+    }
+
+    // inserindo em lista final elementos que nÃ£o se repetem
+    int contador;
+    for (Edge *&EdgeAux : listEdgesAux)
+    {
+        contador = 0;
+        for (Edge *&EdgeAux2 : listEdgesFinal)
+        {
+            /*if(EdgeAux2->getIdAlvo() == EdgeAux->getIdOrigem()
+                    &&   EdgeAux2->getIdOrigem() == EdgeAux->getIdAlvo())*/
+            if (EdgeAux2->getTargetId() == EdgeAux->getIdOrigem() && EdgeAux2->getIdOrigem() == EdgeAux->getTargetId())
+                break;
+            else
+                contador++;
+        }
+        if (contador == listEdgesFinal.size())
+            listEdgesFinal.push_front(EdgeAux);
+    }
+
+    // ordenando a lista de arestas de acordo com o peso
+    listEdgesFinal.sort(ListaArestaComparator());
+
+    // inserindo os nos no grafo final
+
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+
+        graphKruskal->insertNode(node->getId());
+    }
+
+    // setando os pais
+    //father();
+
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        node->setFather(node->getId());
+    }
+
+    // Union find algorithm
+
+    int custoTotalArvore = 0;
+    for (Edge *&EdgeAux : listEdgesFinal)
+    {
+        if (!cicle(EdgeAux))
+        {
+            graphKruskal->insertEdge(EdgeAux->getIdOrigem(), EdgeAux->getTargetId(), EdgeAux->getWeight());
+            custoTotalArvore += EdgeAux->getWeight();
+        }
+    }
+
+    // imprimir o resultado final (Grafo) em tela
+    output_file << graphKruskal->imprimir();
 }
 
+// Funções da primeira etapa
 void Graph::agmPrim(ofstream &output_file)
 {
     Graph *minSpanningTree = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
@@ -531,29 +650,16 @@ void Graph::unites(Node *x, Node *y)
     xraiz->setFather(yraiz->getId());
 }
 
-void Graph::percorre(Node *u)
+bool Graph::cicle(Edge *edge)
 {
-    u->setCheck(true);
-    for (Node *v = this->first_node; v != nullptr; v = v->getNextNode())
-    {
-        if (v->hasEdgeBetween(u->getId()))
-        {
-            if (!v->getCheck())
-                percorre(v);
-        }
-    }
-}
+    Node *aux1 = getNode(edge->getIdOrigem());
+    Node *aux2 = getNode(edge->getTargetId());
 
-bool Graph::cicle()
-{
-    Node *node = this->first_node;
-    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
-        no->setCheck(false);
-    percorre(node);
-    for (Node *no = this->first_node; no != nullptr; no = no->getNextNode())
-        if (!no->getCheck())
-            return false;
-    return true;
+    if (find(aux1) == find(aux2))
+        return true;
+    else
+        unites(aux1, aux2);
+    return false;
 }
 
 string Graph::imprimir()

@@ -25,7 +25,7 @@ private:
     bool weighted_node;
     Node *first_node;
     Node *last_node;
-
+    Graph *ArvoreGeradoraMinima;
 
 public:
     //Constructor
@@ -48,13 +48,15 @@ public:
     Node *getNode(int id);
 
     //methods phase1
+    void imprimeListaAdjacencia(ofstream &output_file);
     void topologicalSorting(ofstream &output_file);
-    void breadthFirstSearch(ofstream &output_file);
+    void breadthFirstSearch(int v, fstream &output_file);
     Graph *getVertexInduced(int *listIdNodes);
-    Graph *agmKuskal(Graph *graph);
+    Graph *agmKruskal(Graph *graph, ofstream &output_file);
     void agmPrim(ofstream &output_file);
     void floydWarshall(ofstream &output_file);
     float dijkstra(int idSource, int idTarget);
+    bool isConnected();
 
     //methods phase1
     float greed();
@@ -65,9 +67,11 @@ public:
     void transitivoDireto(ofstream &output_file, int id);
     void transitivoIndireto(ofstream &output_file, int id);
     void father();
-    bool cicle();
-    bool isConnected();
+    bool cicle(Edge *edge);
     string imprimir();
+    void depthFirstSearch(int v, ofstream &output_file);
+    void depthFirstSearchAux(Node *node, bool *visitados, ofstream &outputFile);
+    void preencheListaNos();
 
 private:
     //Auxiliar methods
@@ -77,7 +81,6 @@ private:
     void unites(Node *x, Node *y);
     Node *find(Node *node);
     void walk(Node *node);
-    void percorre(Node *node);
 };
 
 #endif // GRAPH_H_INCLUDED

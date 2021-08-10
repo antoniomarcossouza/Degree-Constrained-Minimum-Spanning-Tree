@@ -199,17 +199,32 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 6:
     {
+        if(!graph->getDirected()) {
+            cout << "Erro: O Algoritmo de Kruskal exige que as arestas sejam ponderadas!" << endl;
+            break;
+        } 
+        cout << "Algoritmo de Kruskal selecionado!" << endl;
 
+        graph->agmKruskal(graph, output_file);
         break;
     }
     case 7:
-    {
+    {   
+        if(graph->getOrder() == 0) {
+            cout << "Erro: O algoritmo de DFS precisa de vertices para executar!";
+            break;
+        }
+        cout << "Busca em Profundidade selecionada!" << endl;
+        int id;
+        cout << "Infome um ID inicial: " << endl;
+        cin >> id;
 
+        graph->depthFirstSearch(id,output_file);
         break;
     }
     case 8:
     {
-        if (graph->getDirected() && !graph->cicle())
+        if (graph->getDirected())
         {
             graph->topologicalSorting(output_file);
         }

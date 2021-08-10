@@ -79,6 +79,12 @@ Node *Node::getNextNode()
     return this->next_node;
 }
 
+
+int Node::getIndexSearch() 
+{
+    return this->indexSearch;
+}
+
 // Setters
 
 void Node::setNextNode(Node *next_node)
@@ -93,14 +99,19 @@ void Node::setWeight(float weight)
     this->weight = weight;
 }
 
+void Node::setIndexSearch(int index)
+{
+    this->indexSearch = index;
+}
+
 // Other methods
-void Node::insertEdge(int target_id, float weight)
+void Node::insertEdge(int id, int target_id, float weight)
 {
     // Verifies whether there are at least one edge in the node
     if (this->first_edge != nullptr)
     {
         // Allocating the new edge and keeping the integrity of the edge list
-        Edge *edge = new Edge(target_id);
+        Edge *edge = new Edge(id, target_id);
         edge->setWeight(weight);
         this->last_edge->setNextEdge(edge);
         this->last_edge = edge;
@@ -108,7 +119,7 @@ void Node::insertEdge(int target_id, float weight)
     else
     {
         // Allocating the new edge and keeping the integrity of the edge list
-        this->first_edge = new Edge(target_id);
+        this->first_edge = new Edge(id, target_id);
         this->first_edge->setWeight(weight);
         this->last_edge = this->first_edge;
     }

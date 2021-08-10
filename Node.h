@@ -23,7 +23,7 @@ private:
     Node *next_node;
     int position;
     int father;
-    //
+    int indexSearch;
     bool check;
 
 
@@ -45,7 +45,7 @@ public:
     void setWeight(float weight);
     // Other methods
     bool searchEdge(int target_id);
-    void insertEdge(int target_id, float weight);
+    void insertEdge(int id, int target_id, float weight);
     void removeAllEdges();
     int removeEdge(int id, bool directed, Node *target_node);
     void incrementOutDegree();
@@ -53,6 +53,9 @@ public:
     void incrementInDegree();
     void decrementInDegree();
     Edge *hasEdgeBetween(int target_id);
+
+    void setIndexSearch(int i);
+    int getIndexSearch();
 
     void setPosition(int position);
     int getPosition();
