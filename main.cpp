@@ -166,6 +166,12 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 3:
     {
+        int sourceId, destId;
+        cout << "Digite o o id de origem: ";
+        cin >> sourceId;
+        cout << "Digite o o id de destino: ";
+        cin >> destId;
+        graph->dijkstra(output_file, sourceId, destId);
         break;
     }
 

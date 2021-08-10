@@ -279,14 +279,31 @@ float Graph::dijkstra(ofstream &output_file, int sourceId, int destinyId)
 {
     // Cria uma matriz com a distancia de cada nó pros seus outros
     int grafo[order][order];
+    for (int i = 0; i < order; i++)
+    {
+        for (int j = 0; j < order; j++)
+        {
+            grafo[i][j] = 0;
+        }
+    }
+
     for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
             Node *aux = getNode(edge->getTargetId());
             grafo[node->getPosition()][aux->getPosition()] = edge->getWeight();
+            // cout << edge->getWeight() << endl;
         }
     }
+    // for (int i = 0; i < order; i++)
+    // {
+    //     for (int j = 0; j < order; j++)
+    //     {
+    //         cout << grafo[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
 
     int distancia[order]; //Armazena a menor distância da origem pra cada vértice
     bool aberto[order];   //Armazena se o vértice já foi visitado
@@ -329,8 +346,10 @@ float Graph::dijkstra(ofstream &output_file, int sourceId, int destinyId)
         }
     }
 
-    for (int i = 0; i < order; i++)
-        printf("%d \t\t %d\n", i, distancia[i]);
+    // for (int i = 0; i < order; i++)
+    //     printf("%d \t\t %d\n", i, distancia[i]);
+
+    output_file << "Distancia ate o no " << destinyId << ": " << distancia[destinyId];
 }
 
 //function that prints a topological sorting
