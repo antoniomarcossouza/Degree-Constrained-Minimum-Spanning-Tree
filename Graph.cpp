@@ -477,10 +477,13 @@ void Graph::ordenacaoTopologica(ofstream &output_file)
 
     ordenacaoTopologica_Aux(&no, in);
 
-    if (no.size() > 0)
-        output_file << no[0];
-    for (int i = 1; i < no.size(); i++)
-        output_file << " -> " << no[i];
+    if (no.size() == order)
+    {
+        if (no.size() > 0)
+            output_file << no[0];
+        for (int i = 1; i < no.size(); i++)
+            output_file << " -> " << no[i];
+    }
 }
 
 void Graph::ordenacaoTopologica_Aux(vector<int> *no, int in[])
