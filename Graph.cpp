@@ -285,8 +285,49 @@ float Graph::dijkstra(int idSource, int idTarget)
 }
 
 //function that prints a topological sorting
-void topologicalSorting()
+void Graph::topologicalSorting(ofstream &output_file)
 {
+    vector<int> no;
+    int in[order + 1];
+
+    for (int i = 0; i < order + 1; i++)
+        in[i] = -1;
+
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+        in[node->getId()] = node->getOutDegree();
+
+    topologicalSorting_aux(&no, in);
+
+    if (no.size() == order)
+    {
+        if (no.size() > 0)
+            output_file << no[0];
+        for (int i = 1; i < no.size(); i++)
+            output_file << " -> " << no[i];
+    }
+}
+
+void Graph::topologicalSorting_aux(vector<int> *no, int in[])
+{
+    if (no->size() != order)
+    {
+        for (int i = 0; i < order + 1; i++)
+        {
+            if (in[i] == 0)
+            {
+                no->push_back(i);
+                in[i] = -1;
+                Node *node = getNode(i);
+                for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+                {
+                    in[edge->getTargetId()]--;
+                }
+                topologicalSorting_aux(no, in);
+                return;
+            }
+        }
+        cout << "O grafo não é acíclico direcionado." << endl;
+    }
 }
 
 void breadthFirstSearch(ofstream &output_file)
@@ -461,51 +502,6 @@ void Graph::transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id)
             for (Node *nodeAux = this->first_node; nodeAux != nullptr; nodeAux = nodeAux->getNextNode())
                 transitivoIndireto_Aux(graphTransitivo, nodeAux, node->getId());
         }
-    }
-}
-
-void Graph::ordenacaoTopologica(ofstream &output_file)
-{
-    vector<int> no;
-    int in[order + 1];
-
-    for (int i = 0; i < order + 1; i++)
-        in[i] = -1;
-
-    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-        in[node->getId()] = node->getOutDegree();
-
-    ordenacaoTopologica_Aux(&no, in);
-
-    if (no.size() == order)
-    {
-        if (no.size() > 0)
-            output_file << no[0];
-        for (int i = 1; i < no.size(); i++)
-            output_file << " -> " << no[i];
-    }
-}
-
-void Graph::ordenacaoTopologica_Aux(vector<int> *no, int in[])
-{
-    if (no->size() != order)
-    {
-        for (int i = 0; i < order + 1; i++)
-        {
-            if (in[i] == 0)
-            {
-                no->push_back(i);
-                in[i] = -1;
-                Node *node = getNode(i);
-                for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
-                {
-                    in[edge->getTargetId()]--;
-                }
-                ordenacaoTopologica_Aux(no, in);
-                return;
-            }
-        }
-        cout << "O grafo não é acíclico direcionado." << endl;
     }
 }
 

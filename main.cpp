@@ -211,7 +211,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     {
         if (graph->getDirected() && !graph->cicle())
         {
-            graph->ordenacaoTopologica(output_file);
+            graph->topologicalSorting(output_file);
         }
         else
             cout << "O grafo não é acíclico direcionado." << endl;

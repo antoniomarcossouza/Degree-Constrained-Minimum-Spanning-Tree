@@ -48,7 +48,7 @@ public:
     Node *getNode(int id);
 
     //methods phase1
-    void topologicalSorting();
+    void topologicalSorting(ofstream &output_file);
     void breadthFirstSearch(ofstream &output_file);
     Graph *getVertexInduced(int *listIdNodes);
     Graph *agmKuskal(Graph *graph);
@@ -64,21 +64,16 @@ public:
     //primeira etapa
     void transitivoDireto(ofstream &output_file, int id);
     void transitivoIndireto(ofstream &output_file, int id);
-    void ordenacaoTopologica(ofstream &output_file);
-
     void father();
     bool cicle();
     bool isConnected();
-
     string imprimir();
 
 private:
     //Auxiliar methods
     void transitivoDireto_Aux(Graph *graphTransitivo, Node *node);
     void transitivoIndireto_Aux(Graph *graphTransitivo, Node *node, int id);
-
-    void ordenacaoTopologica_Aux(vector<int> *no, int in[]);
-
+    void topologicalSorting_aux(vector<int> *no, int in[]);
     void unites(Node *x, Node *y);
     Node *find(Node *node);
     void walk(Node *node);
