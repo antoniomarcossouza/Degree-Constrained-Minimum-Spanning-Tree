@@ -275,11 +275,121 @@ void Graph::floydWarshall(ofstream &output_file)
     }
 }
 
-float Graph::dijkstra(int idSource, int idTarget)
+float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
 {
+    // vetores
+
+    //  Graph *graph = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());new Graph()
+
+    int *nodes = new int[getOrder()];
+    int *dist = new int[getOrder()];
+    int *ant = new int[getOrder()];
+    int *aux = new int[getOrder()];
+
+    // setando indice de busca de cada no
+    int counter = 0;
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+    {
+        node->setIndexSearch(counter);
+        counter++;
+    }
+
+    // O grafo agora passa a ter seu primeiro no correspondente ao idSource
+    this->first_node->setIdNode(idSource);
+
+    // agora apontando para o novo primeiro no(idSource)
+    Node *p = this->first_node;
+
+    // percorrendo todos os nos
+    while (p != nullptr)
+    {
+        // definindo que cada vertice terá seu proprio indice de busca e posicao no vetor de nodes
+        nodes[p->getIndexSearch()] = p->getId();
+
+        // verificando a igualdade de nos
+        if (p->getId() == this->first_node->getId())
+        {
+            // atribuindo distancia 0 a nodes que se correspondem
+            dist[p->getIndexSearch()] = 0;
+            ant[p->getIndexSearch()] = p->getId();
+        }
+        else
+        {
+            // atribuindo infinito para os nodes que não pertence ao seu conjunto de vizinhos
+            dist[p->getIndexSearch()] = INF;
+            ant[p->getIndexSearch()] = -1;
+        }
+
+        aux[p->getIndexSearch()] = -1;
+        p = p->getNextNode();
+    }
+
+    p = this->first_node;
+    Edge *adjacentes;
+
+    int numeroNosaux = getOrder();
+    int indiceComMenorEstimativa;
+
+    while (numeroNosaux > 0)
+    {
+        indiceComMenorEstimativa = buscaIndiceComMenorEstimativa(dist, aux, getOrder());
+
+        if (aux[indiceComMenorEstimativa] == -1)
+        {
+            aux[indiceComMenorEstimativa] = 1;
+
+            adjacentes = getNode(nodes[indiceComMenorEstimativa])->getFirstEdge();
+
+            while (adjacentes != nullptr)
+            {
+                Node *aux = getNode(adjacentes->getTargetId());
+                if (dist[indiceComMenorEstimativa] + adjacentes->getWeight() < dist[aux->getIndexSearch()])
+                {
+                    dist[aux->getIndexSearch()] = dist[indiceComMenorEstimativa] + adjacentes->getWeight();
+                    ant[aux->getIndexSearch()] = nodes[indiceComMenorEstimativa];
+                }
+                adjacentes = adjacentes->getNextEdge();
+            }
+        }
+        numeroNosaux--;
+    }
+    output_file << "DISTANCIA MINIMA DO VERTICE " << idSource << " PARA O VERTICE " << idTarget << endl;
+
+    for (int i = 0; i < getOrder(); i++)
+    {
+        if (i == getNode(idTarget)->getIndexSearch())
+        {
+            output_file << " PARA O VERTICE: " << nodes[getNode(i)->getId()] << " = " << dist[i] << endl;
+        }
+    }
     return 0;
 }
 
+int Graph::buscaIndiceComMenorEstimativa(int *dist, int *aux, int tam)
+{
+    int menor;
+    int indice = 0;
+
+    for (int i = 0; i < tam; i++)
+    {
+        if (aux[i] == -1)
+            menor = dist[i];
+    }
+
+    for (int i = 0; i < tam; i++)
+    {
+        if (aux[i] == -1)
+        {
+            if (dist[i] < menor)
+            {
+                menor = dist[i];
+                indice = i;
+            }
+        }
+    }
+
+    return indice;
+}
 //function that prints a topological sorting
 void Graph::topologicalSorting(ofstream &output_file)
 {
@@ -713,4 +823,29 @@ string Graph::imprimir()
     stream << "}" << endl;
 
     return stream.str();
+}
+
+void Graph::setId(int id)
+{
+    Node *n = this->first_node;
+
+    while (n != nullptr)
+    {
+        if (n->getId() == id)
+        {
+            break;
+        }
+        n = n->getNextNode();
+    }
+
+    if (n != nullptr)
+    {
+
+        n->setIdNode(id);
+    }
+    else
+    {
+
+        cout << "No nao encontrado!";
+    }
 }

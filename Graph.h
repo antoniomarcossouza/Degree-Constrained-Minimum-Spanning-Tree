@@ -55,8 +55,9 @@ public:
     Graph *agmKruskal(Graph *graph, ofstream &output_file);
     void agmPrim(ofstream &output_file);
     void floydWarshall(ofstream &output_file);
-    float dijkstra(int idSource, int idTarget);
+    float dijkstra(ofstream &output_file, int idSource, int idTarget);
     bool isConnected();
+    int buscaIndiceComMenorEstimativa(int* distancias, int* abertos,int tam);
 
     //methods phase1
     float greed();
@@ -72,6 +73,7 @@ public:
     void depthFirstSearch(int v, ofstream &output_file);
     void depthFirstSearchAux(Node *node, bool *visitados, ofstream &outputFile);
     void preencheListaNos();
+    void setId(int id);
 
 private:
     //Auxiliar methods

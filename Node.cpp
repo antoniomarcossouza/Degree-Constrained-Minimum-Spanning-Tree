@@ -269,3 +269,8 @@ void Node::setCheck(bool i)
 {
     check = i;
 }
+
+void Node::setIdNode(int id)
+{
+    this->id = id;
+}

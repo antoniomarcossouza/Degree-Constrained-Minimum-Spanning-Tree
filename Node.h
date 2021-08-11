@@ -66,6 +66,8 @@ public:
     bool getCheck();
     void setCheck(bool i);
 
+    void setIdNode(int id);
+
 };
 
 #endif // NODE_H_INCLUDED

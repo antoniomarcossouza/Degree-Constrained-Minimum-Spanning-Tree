@@ -166,7 +166,26 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 3:
     {
-        break;
+        if (!graph->getWeightedEdge())
+        {
+            cout << "O Algoritmo de Djikstra precisa de peso nas arestas!\n";
+            break;
+        }
+        else
+        {
+            int id1;
+            int id2;
+            cout << "Digite o vertice inicial: " << endl;
+            cin >> id1;
+            cout << "Digite o vertice final: " << endl;
+            cin >> id2;
+
+            if (graph->getWeightedEdge())
+            {
+                graph->dijkstra(output_file, id1, id2);
+            }
+            break;
+        }
     }
 
     case 4:
@@ -199,18 +218,20 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
 
     case 6:
     {
-        if(!graph->getDirected()) {
+        if (!graph->getDirected())
+        {
             cout << "Erro: O Algoritmo de Kruskal exige que as arestas sejam ponderadas!" << endl;
             break;
-        } 
+        }
         cout << "Algoritmo de Kruskal selecionado!" << endl;
 
         graph->agmKruskal(graph, output_file);
         break;
     }
     case 7:
-    {   
-        if(graph->getOrder() == 0) {
+    {
+        if (graph->getOrder() == 0)
+        {
             cout << "Erro: O algoritmo de DFS precisa de vertices para executar!";
             break;
         }
@@ -219,7 +240,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         cout << "Infome um ID inicial: " << endl;
         cin >> id;
 
-        graph->depthFirstSearch(id,output_file);
+        graph->depthFirstSearch(id, output_file);
         break;
     }
     case 8:
@@ -246,7 +267,7 @@ int mainMenu(ofstream &output_file, Graph *graph)
 
     while (selecao != 0)
     {
-        //system("clear");
+        system("clear");
         selecao = menu();
 
         if (output_file.is_open())
