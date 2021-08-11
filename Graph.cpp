@@ -329,13 +329,13 @@ void Graph::topologicalSorting_aux(vector<int> *no, int in[])
 void Graph::depthFirstSearch(int v, ofstream &output_file)
 {
 
-    Node *node = this->first_node;          // no aponta para primeiro no
-    bool *visitados = new bool[getOrder()]; // vetor para verificar os nós visitados
+    Node *node = this->first_node;        // no aponta para primeiro no
+    bool *visited = new bool[getOrder()]; // vetor para verificar os nós visited
 
     for (int i = 0; i < getOrder(); i++)
     {
         node->setIndexSearch(i);    // setando indice de busca dos nós
-        visitados[i] = 0;           // setando indice visitados como false
+        visited[i] = 0;             // setando indice visited como false
         node = node->getNextNode(); // percorrendo todos os nós
     }
 
@@ -349,21 +349,21 @@ void Graph::depthFirstSearch(int v, ofstream &output_file)
     else
     {
 
-        depthFirstSearchAux(node, visitados, output_file);
+        depthFirstSearchAux(node, visited, output_file);
     }
 
-    delete[] visitados; // desalocando vetor de visitados
+    delete[] visited; // desalocando vetor de visited
 }
 
 void Graph::breadthFirstSearch(int v, fstream &output_file)
 {
 }
 
-void Graph::depthFirstSearchAux(Node *node, bool *visitados, ofstream &output_file)
+void Graph::depthFirstSearchAux(Node *node, bool *visited, ofstream &output_file)
 {
 
     output_file << "\n*** Visitando o no '" << node->getId() << "':" << endl;
-    visitados[node->getIndexSearch()] = 1; // marcando como vistado
+    visited[node->getIndexSearch()] = 1; // marcando como vistado
 
     Edge *edge = node->getFirstEdge();
 
@@ -371,12 +371,12 @@ void Graph::depthFirstSearchAux(Node *node, bool *visitados, ofstream &output_fi
     {
         Node *aux = getNode(edge->getTargetId());
 
-        if (visitados[aux->getIndexSearch()] == 0)
+        if (visited[aux->getIndexSearch()] == 0)
         {
 
             output_file << "(v) Avanco: (" << node->getId() << " , " << aux->getId() << ")" << endl;
 
-            depthFirstSearchAux(aux, visitados, output_file);
+            depthFirstSearchAux(aux, visited, output_file);
         }
         else
         {
@@ -473,59 +473,89 @@ Graph *Graph::agmKruskal(Graph *graph, ofstream &output_file)
 
 void Graph::agmPrim(ofstream &output_file)
 {
-    Graph *minSpanningTree = new Graph(this->getOrder(), this->getDirected(), this->getWeightedEdge(), this->getWeightedNode());
-    typedef vector<tuple<int, int, int>> no;
-    no tl;
+    int *custo = new int[this->order];
+    int *proximo = new int[this->order];
+    bool *visited = new bool[this->order];
 
-    Edge *minEdge = this->getFirstNode()->getFirstEdge();
+    int **matriz = new int *[this->order];
 
-    for (Node *node = this->getFirstNode(); node != nullptr; node = node->getNextNode())
+    for (int i = 0; i < this->order; i++)
     {
-        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+        matriz[i] = new int[this->order];
+        for (int j = 0; j < this->order; j++)
+            matriz[i][j] = INF;
+    }
+
+    for (Node *aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
+    {
+        if (aux->getFirstEdge() != nullptr)
         {
-            if (edge->getWeight() < minEdge->getWeight())
+            for (Edge *aux2 = aux->getFirstEdge(); aux2 != nullptr; aux2 = aux2->getNextEdge())
             {
-                minEdge = edge;
+                matriz[aux->getId() - this->first_node->getId() != 0 ? 1 : 0][aux2->getTargetId() - this->first_node->getId() != 0 ? 1 : 0] = aux2->getWeight();
+                matriz[aux2->getTargetId() - this->first_node->getId() != 0 ? 1 : 0][aux->getId() - this->first_node->getId() != 0 ? 1 : 0] = aux2->getWeight();
             }
         }
     }
 
-    minSpanningTree->insertEdge(minEdge->getIdOrigem(), minEdge->getTargetId(), minEdge->getWeight());
-    tl.push_back(tuple<int, int, int>(minEdge->getIdOrigem(), minEdge->getTargetId(), 0));
-
-    for (int i = 0; i < this->getOrder(); i++)
+    visited[0] = true;
+    for (int i = 1; i < this->order; i++)
     {
-        for (Node *node = minSpanningTree->getFirstNode(); node != nullptr; node = node->getNextNode())
-        {
-            minEdge = node->getFirstEdge();
-            for (Edge *edge = this->getNode(node->getId())->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
-            {
-                if (get<2>(tl[minEdge->getIdOrigem()]) == 0 || (edge->getWeight() < minEdge->getWeight() && get<2>(tl[edge->getIdOrigem()]) != 0))
-                {
-                    minEdge = edge;
-                }
-            }
-            if (minEdge != NULL)
-                tl.push_back(tuple<int, int, int>(minEdge->getIdOrigem(), minEdge->getTargetId(), minEdge->getWeight()));
-        }
-
-        int min = 999999999;
-        int idMin = 0;
-
-        for (int i = 0; i < tl.size(); i++)
-        {
-            if (get<2>(tl[i]) < min && get<2>(tl[i]) != 0)
-            {
-                min = get<2>(tl[i]);
-                idMin = i;
-            }
-        }
-
-        minSpanningTree->insertEdge(get<0>(tl[idMin]), get<1>(tl[idMin]), get<2>(tl[idMin]));
-        tl[idMin] = tuple<int, int, int>(get<0>(tl[idMin]), get<1>(tl[idMin]), 0);
+        custo[i] = matriz[0][i];
+        proximo[i] = 0;
+        visited[i] = false;
     }
 
-    cout << minSpanningTree->imprimir();
+    int peso = 0;
+    int arestas = 0;
+    int vert = 0;
+
+    output_file << "graph imprimir {" << endl;
+
+    for (int i = 0; i < this->order; i++)
+    {
+        int min = INF;
+        int k = 1;
+
+        for (int j = 0; j < this->order; j++)
+        {
+            if (custo[j] < min && !visited[j])
+            {
+                min = custo[j];
+                k = j;
+            }
+        }
+
+        if (k == 1 && min == INF)
+            break;
+        else
+            peso += min;
+
+        if (vert == 0)
+            output_file << "    " << this->order - (this->first_node->getId() == 0 ? 1 : 0) << " -- " << k - (this->first_node->getId() == 0 ? 1 : 0) << ";" << endl;
+        else if (k == 0)
+            output_file << "    " << vert - (this->first_node->getId() == 0 ? 1 : 0) << " -- " << this->order << ";" << endl;
+        else
+            output_file << "    " << vert - (this->first_node->getId() == 0 ? 1 : 0) << " -- " << k - (this->first_node->getId() == 0 ? 1 : 0) << ";" << endl;
+
+        vert = k;
+        visited[k] = true;
+        arestas++;
+        for (int j = 1; j < this->order; j++)
+        {
+            if ((matriz[k][j] < custo[j]) && (!visited[j]))
+            {
+                custo[j] = matriz[k][j];
+                proximo[j] = k;
+            }
+        }
+    }
+
+    output_file << "}" << endl;
+
+    for (int i = 0; i < this->order; i++)
+        delete[] matriz[i];
+    delete[] matriz;
 }
 
 void Graph::walk(Node *node)
