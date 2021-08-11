@@ -325,41 +325,41 @@ float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
     }
 
     p = this->first_node;
-    Edge *adjacentes;
+    Edge *visinhos;
 
     int numeroNosaux = getOrder();
-    int indiceComMenorEstimativa;
+    int menor;
 
     while (numeroNosaux > 0)
     {
-        indiceComMenorEstimativa = findIndice(dist, aux, getOrder());
+        menor = findIndice(dist, aux, getOrder());
 
-        if (aux[indiceComMenorEstimativa] == -1)
+        if (aux[menor] == -1)
         {
-            aux[indiceComMenorEstimativa] = 1;
+            aux[menor] = 1;
 
-            adjacentes = getNode(nodes[indiceComMenorEstimativa])->getFirstEdge();
+            visinhos = getNode(nodes[menor])->getFirstEdge();
 
-            while (adjacentes != nullptr)
+            while (visinhos != nullptr)
             {
-                Node *aux = getNode(adjacentes->getTargetId());
-                if (dist[indiceComMenorEstimativa] + adjacentes->getWeight() < dist[aux->getIndexSearch()])
+                Node *aux = getNode(visinhos->getTargetId());
+                if (dist[menor] + visinhos->getWeight() < dist[aux->getIndexSearch()])
                 {
-                    dist[aux->getIndexSearch()] = dist[indiceComMenorEstimativa] + adjacentes->getWeight();
-                    ant[aux->getIndexSearch()] = nodes[indiceComMenorEstimativa];
+                    dist[aux->getIndexSearch()] = dist[menor] + visinhos->getWeight();
+                    ant[aux->getIndexSearch()] = nodes[menor];
                 }
-                adjacentes = adjacentes->getNextEdge();
+                visinhos = visinhos->getNextEdge();
             }
         }
         numeroNosaux--;
     }
-    output_file << "DISTANCIA MINIMA DO VERTICE " << idSource << " PARA O VERTICE " << idTarget << endl;
+    output_file << "Distância mínima entre " << idSource << " e " << idTarget << endl;
 
     for (int i = 0; i < getOrder(); i++)
     {
         if (i == getNode(idTarget)->getIndexSearch())
         {
-            output_file << " PARA O VERTICE: " << nodes[getNode(i)->getId()] << " = " << dist[i] << endl;
+            output_file << nodes[getNode(i)->getId()] << " = " << dist[i] << endl;
         }
     }
     return 0;
