@@ -332,7 +332,7 @@ float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
 
     while (numeroNosaux > 0)
     {
-        indiceComMenorEstimativa = buscaIndiceComMenorEstimativa(dist, aux, getOrder());
+        indiceComMenorEstimativa = findIndice(dist, aux, getOrder());
 
         if (aux[indiceComMenorEstimativa] == -1)
         {
@@ -365,7 +365,7 @@ float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
     return 0;
 }
 
-int Graph::buscaIndiceComMenorEstimativa(int *dist, int *aux, int tam)
+int Graph::findIndice(int *dist, int *aux, int tam)
 {
     int menor;
     int indice = 0;

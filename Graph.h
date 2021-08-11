@@ -57,7 +57,7 @@ public:
     void floydWarshall(ofstream &output_file);
     float dijkstra(ofstream &output_file, int idSource, int idTarget);
     bool isConnected();
-    int buscaIndiceComMenorEstimativa(int* distancias, int* abertos,int tam);
+    int findIndice(int* distancias, int* abertos,int tam);
 
     //methods phase1
     float greed();
