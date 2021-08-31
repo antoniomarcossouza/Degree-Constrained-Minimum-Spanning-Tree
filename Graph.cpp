@@ -849,3 +849,57 @@ void Graph::setId(int id)
         cout << "No nao encontrado!";
     }
 }
+
+void Graph::AGMRG_Guloso(int grau)
+{
+    Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
+
+    if (order != (order * (order - 1) / 2))
+    {
+        cout << "O grafo precisa ser completo!" << endl;
+        return;
+    }
+
+    list<Edge *> listEdgesAux;
+    list<Edge *> listEdgesFinal;
+
+    clock_t inicio = clock();
+
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+            listEdgesAux.push_back(edge);
+
+    int contador;
+    for (Edge *&EdgeAux : listEdgesAux)
+    {
+        contador = 0;
+        for (Edge *&EdgeAux2 : listEdgesFinal)
+        {
+            if (EdgeAux2->getTargetId() == EdgeAux->getIdOrigem() && EdgeAux2->getIdOrigem() == EdgeAux->getTargetId())
+                break;
+            else
+                contador++;
+        }
+        if (contador == listEdgesFinal.size())
+            listEdgesFinal.push_front(EdgeAux);
+    }
+
+    listEdgesFinal.sort(ListaArestaComparator());     
+
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+        AGMRG->insertNode(node->getId());
+
+    int custoTotalArvore = 0;
+    for (Edge *&EdgeAux : listEdgesFinal)
+    {
+        if (!cicle(EdgeAux) && (AGMRG->getNode(EdgeAux->getTargetId())->getInDegree() < grau))
+        {
+            AGMRG->insertEdge(EdgeAux->getIdOrigem(), EdgeAux->getTargetId(), EdgeAux->getWeight());
+            custoTotalArvore += EdgeAux->getWeight();
+        }
+    }
+
+    clock_t fim = clock();
+    cout << AGMRG->imprimir();
+    cout << "Tempo: " << fim - inicio << " ms" << endl;
+}

@@ -75,6 +75,9 @@ public:
     void preencheListaNos();
     void setId(int id);
 
+    void AGMRG_Guloso(int grau);
+    void AGMRG_GulosoRandomizado(int grau);
+
 private:
     //Auxiliar methods
     void transitivoDireto_Aux(Graph *graphTransitivo, Node *node);

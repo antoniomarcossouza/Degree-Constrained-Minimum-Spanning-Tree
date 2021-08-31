@@ -119,6 +119,7 @@ int menu()
     cout << "[6] Árvore Geradora Mínima de Kruskal" << endl;
     cout << "[7] Árvore dada pela ordem de caminhamento em profundidade" << endl;
     cout << "[8] Grafo acíclico direcionado" << endl;
+    cout << "[9] AGMRG" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -251,6 +252,11 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         }
         else
             cout << "O grafo não é acíclico direcionado." << endl;
+        break;
+    }
+    case 9:
+    {
+        graph->AGMRG_Guloso(10);
         break;
     }
     default:
