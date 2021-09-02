@@ -16,6 +16,7 @@ class Edge{
         int target_id;
         Edge* next_edge;
         float weight;
+        float score;
 
     public:
         // Constructors
@@ -39,7 +40,8 @@ class Edge{
         {
             return weight < Edge2.weight;
         }
-
+        float getScore();
+        void setScore(float score);
 };      
 
 #endif // EDGE_H_INCLUDED

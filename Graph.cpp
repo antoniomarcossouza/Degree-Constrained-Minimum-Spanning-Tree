@@ -15,6 +15,9 @@
 #include <algorithm>
 #include <tuple>
 
+#define FATOR_MULTICIPLICADOR = 1;
+#define FATOR_PENALIZADOR = 1.8;
+
 #define INF 99999
 
 using namespace std;
@@ -865,10 +868,12 @@ void Graph::AGMRG_Guloso(int grau)
 
     clock_t inicio = clock();
 
-    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
-        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
+    for (Node *node = this->first_node; node != nullptr; node = node->getNextNode()) {
+        for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge()) {
+            edge->setScore(edge->getWeight() * FATOR_MULTICIPLICADOR);
             listEdgesAux.push_back(edge);
-
+        }
+    }
     int contador;
     for (Edge *&EdgeAux : listEdgesAux)
     {

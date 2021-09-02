@@ -83,3 +83,13 @@ void Edge::setWeight(float weight){
     this->weight = weight;
 
 }
+
+float  Edge::getScore() {
+
+    return this->score;
+}
+
+void Edge::setScore(float score) {
+
+    this->score = score;
+}
