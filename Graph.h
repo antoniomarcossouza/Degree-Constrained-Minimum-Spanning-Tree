@@ -77,6 +77,7 @@ public:
 
     void AGMRG_Guloso(int grau);
     void AGMRG_GulosoRandomizado(int grau);
+    void AGMRG_GulosoRandomizadoReativo(int grau);
 
 private:
     //Auxiliar methods

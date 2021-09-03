@@ -256,7 +256,17 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     }
     case 9:
     {
-        graph->AGMRG_Guloso(10);
+        if (!graph->getDirected() && graph->getWeightedEdge())
+        {
+            int grau;
+            cout << "Qual o menor grau da arvore geradora? " << endl;
+            cin >> grau;
+            graph->AGMRG_Guloso(grau);
+        }
+        else
+        {
+            cout << "O grafo precisa ser não direciona e ter peso nas arestas." << endl;
+        }
         break;
     }
     default:
@@ -273,7 +283,7 @@ int mainMenu(ofstream &output_file, Graph *graph)
 
     while (selecao != 0)
     {
-        system("clear");
+        //system("clear");
         selecao = menu();
 
         if (output_file.is_open())
