@@ -119,7 +119,9 @@ int menu()
     cout << "[6] Árvore Geradora Mínima de Kruskal" << endl;
     cout << "[7] Árvore dada pela ordem de caminhamento em profundidade" << endl;
     cout << "[8] Grafo acíclico direcionado" << endl;
-    cout << "[9] AGMRG" << endl;
+    cout << "[9] AGMRG Guloso" << endl;
+    cout << "[10] AGMRG Guloso Randomizado" << endl;
+    cout << "[11] AGMRG Guloso Randomizado Reativo" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -256,7 +258,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     }
     case 9:
     {
-        if (!graph->getDirected() && graph->getWeightedEdge())
+        if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
             cout << "Qual o menor grau da arvore geradora? " << endl;
@@ -265,7 +267,37 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         }
         else
         {
-            cout << "O grafo precisa ser não direciona e ter peso nas arestas." << endl;
+            cout << "O grafo precisa ser direciona e ter peso nas arestas." << endl;
+        }
+        break;
+    }
+    case 10:
+    {
+        if (graph->getDirected() && graph->getWeightedEdge())
+        {
+            int grau;
+            cout << "Qual o menor grau da arvore geradora? " << endl;
+            cin >> grau;
+            graph->AGMRG_GulosoRandomizado(grau);
+        }
+        else
+        {
+            cout << "O grafo precisa ser direciona e ter peso nas arestas." << endl;
+        }
+        break;
+    }
+    case 11:
+    {
+        if (graph->getDirected() && graph->getWeightedEdge())
+        {
+            int grau;
+            cout << "Qual o menor grau da arvore geradora? " << endl;
+            cin >> grau;
+            graph->AGMRG_GulosoRandomizadoReativo(grau);
+        }
+        else
+        {
+            cout << "O grafo precisa ser direciona e ter peso nas arestas." << endl;
         }
         break;
     }

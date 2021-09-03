@@ -795,7 +795,7 @@ bool Graph::cicle(Edge *edge)
         return true;
     else
         unites(aux1, aux2);
-        return false;
+    return false;
 }
 
 string Graph::imprimir()
@@ -897,6 +897,9 @@ void Graph::AGMRG_Guloso(int grau)
     for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
         AGMRG->insertNode(node->getId());
 
+    for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+        node->setFather(node->getId());
+
     int custoTotalArvore = 0;
     for (Edge *&EdgeAux : listEdgesFinal)
     {
@@ -923,16 +926,17 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
         return;
     }
 
-    Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     int menorCusto = 0;
 
+    clock_t inicio = clock();
+
     for (int i = 0; i < 100; i++)
     {
+        Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
 
-        clock_t inicio = clock();
         float fator_penalizador1 = (float)rand() / (float)(5 / 9);
         float fator_penalizador2 = (float)rand() / (float)(5 / 9);
 
@@ -964,6 +968,9 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
         for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
             AGMRG->insertNode(node->getId());
 
+        for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+            node->setFather(node->getId());
+
         int custoTotalArvore = 0;
         for (Edge *&EdgeAux : listEdgesFinal)
         {
@@ -973,10 +980,6 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
                 custoTotalArvore += EdgeAux->getWeight();
             }
         }
-
-        clock_t fim = clock();
-        cout << AGMRG->imprimir();
-        cout << "Tempo: " << fim - inicio << " ms" << endl;
 
         if (AGMRG_Best->first_node == nullptr)
         {
@@ -1006,6 +1009,10 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
             }
         }
     }
+
+    clock_t fim = clock();
+    cout << AGMRG_Best->imprimir();
+    cout << "Tempo: " << fim - inicio << " ms" << endl;
 }
 
 void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
@@ -1016,9 +1023,10 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
         return;
     }
 
-    Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     int menorCusto = 0;
+
+    clock_t inicio = clock();
 
     float fator_penalizador1 = (float)rand() / (float)(5 / 9);
     float fator_penalizador2 = (float)rand() / (float)(5 / 9);
@@ -1027,10 +1035,9 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 
     for (int i = 0; i < 100; i++)
     {
+        Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
-
-        clock_t inicio = clock();
 
         for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         {
@@ -1060,6 +1067,9 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
         for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
             AGMRG->insertNode(node->getId());
 
+        for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
+            node->setFather(node->getId());
+
         int custoTotalArvore = 0;
         for (Edge *&EdgeAux : listEdgesFinal)
         {
@@ -1069,10 +1079,6 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
                 custoTotalArvore += EdgeAux->getWeight();
             }
         }
-
-        clock_t fim = clock();
-        cout << AGMRG->imprimir();
-        cout << "Tempo: " << fim - inicio << " ms" << endl;
 
         if (AGMRG_Best->first_node == nullptr)
         {
@@ -1126,4 +1132,8 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
             }
         }
     }
+
+    clock_t fim = clock();
+    cout << AGMRG_Best->imprimir();
+    cout << "Tempo: " << fim - inicio << " ms" << endl;
 }
