@@ -101,7 +101,21 @@ Graph *leituraInstancia(ifstream &input_file, int directed, int weightedEdge, in
         no->setY(y);
     }
 
-     
+    for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
+    {
+        for (Node *no = node->getNextNode(); no != nullptr; no = no->getNextNode())
+        {
+            float valf = sqrt( (pow(node->getX() - no->getX() ,2)) * (pow(node->getY() - no->getY() ,2)) );
+            int vali = (int)valf;
+            float var = abs(valf - vali);
+
+            float dis;
+            var >= 0.5 ? dis = vali++ : dis  = vali;
+
+            no->insertEdge(no->getId(), node->getId(), dis);
+
+        }
+    }
 
     return graph;
 }
@@ -263,7 +277,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
-            cout << "Qual o menor grau da arvore geradora? " << endl;
+            cout << "Qual é a restrição de grau da arvore gerado? " << endl;
             cin >> grau;
             graph->AGMRG_Guloso(grau);
         }
@@ -278,7 +292,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
-            cout << "Qual o menor grau da arvore geradora? " << endl;
+            cout << "Qual é a restrição de grau da arvore gerado? " << endl;
             cin >> grau;
             graph->AGMRG_GulosoRandomizado(grau);
         }
@@ -293,7 +307,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
-            cout << "Qual o menor grau da arvore geradora? " << endl;
+            cout << "Qual é a restrição de grau da arvore gerado? " << endl;
             cin >> grau;
             graph->AGMRG_GulosoRandomizadoReativo(grau);
         }
@@ -364,8 +378,8 @@ int main(int argc, char const *argv[])
     {
         int opcao;
         cout << "----" << endl;
-        cout << "[1] O grafo apenas" << endl;
-        cout << "[2] O grafo possui os pontos no plano" << endl;
+        cout << "[1] O arquivo de entrada possui um grafo" << endl;
+        cout << "[2] O arquivo de entrada possui pontos no espaço" << endl;
         cin >> opcao;
 
         switch (opcao)

@@ -835,22 +835,14 @@ void Graph::setId(int id)
     while (n != nullptr)
     {
         if (n->getId() == id)
-        {
             break;
-        }
         n = n->getNextNode();
     }
 
     if (n != nullptr)
-    {
-
         n->setIdNode(id);
-    }
     else
-    {
-
         cout << "No nao encontrado!";
-    }
 }
 
 void Graph::AGMRG_Guloso(int grau)
@@ -1003,6 +995,7 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
     clock_t fim = clock();
     cout << AGMRG_Best->imprimir();
     cout << "Tempo: " << fim - inicio << " ms" << endl;
+    cout << "Custo minimo encontrado: " << menorCusto << endl;
 }
 
 void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
@@ -1120,4 +1113,5 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
     clock_t fim = clock();
     cout << AGMRG_Best->imprimir();
     cout << "Tempo: " << fim - inicio << " ms" << endl;
+    cout << "Custo minimo encontrado: " << menorCusto << endl;
 }
