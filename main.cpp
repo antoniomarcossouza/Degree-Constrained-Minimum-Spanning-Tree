@@ -30,7 +30,6 @@ Graph *leitura(ifstream &input_file, int directed, int weightedEdge, int weighte
 
     if (!graph->getWeightedEdge() && !graph->getWeightedNode())
     {
-
         while (input_file >> idNodeSource >> idNodeTarget)
         {
 
@@ -39,18 +38,15 @@ Graph *leitura(ifstream &input_file, int directed, int weightedEdge, int weighte
     }
     else if (graph->getWeightedEdge() && !graph->getWeightedNode())
     {
-
         float edgeWeight;
 
         while (input_file >> idNodeSource >> idNodeTarget >> edgeWeight)
         {
-
             graph->insertEdge(idNodeSource, idNodeTarget, edgeWeight);
         }
     }
     else if (graph->getWeightedNode() && !graph->getWeightedEdge())
     {
-
         float nodeSourceWeight, nodeTargetWeight;
 
         while (input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight)
@@ -63,7 +59,6 @@ Graph *leitura(ifstream &input_file, int directed, int weightedEdge, int weighte
     }
     else if (graph->getWeightedNode() && graph->getWeightedEdge())
     {
-
         float nodeSourceWeight, nodeTargetWeight, edgeWeight;
 
         while (input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight)
@@ -95,11 +90,18 @@ Graph *leituraInstancia(ifstream &input_file, int directed, int weightedEdge, in
     Graph *graph = new Graph(order, directed, weightedEdge, weightedNode);
 
     //Leitura de arquivo
-    while (input_file >> idNodeSource >> idNodeTarget)
+    int id;
+    double x, y;
+    while (input_file >> id >> x >> y)
     {
+        graph->insertNode(id);
 
-        graph->insertEdge(idNodeSource, idNodeTarget, 0);
+        Node *no = graph->getNode(id);
+        no->setX(x);
+        no->setY(y);
     }
+
+     
 
     return graph;
 }
@@ -359,7 +361,23 @@ int main(int argc, char const *argv[])
     Graph *graph;
 
     if (input_file.is_open())
-        graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+    {
+        int opcao;
+        cout << "----" << endl;
+        cout << "[1] O grafo apenas" << endl;
+        cout << "[2] O grafo possui os pontos no plano" << endl;
+        cin >> opcao;
+
+        switch (opcao)
+        {
+        case 1:
+            graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+            break;
+        case 2:
+            graph = leituraInstancia(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+            break;
+        }
+    }
     else
         cout << "Unable to open " << argv[1];
 

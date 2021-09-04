@@ -25,6 +25,8 @@ private:
     int father;
     int indexSearch;
     bool check;
+    float x;
+    float y;
 
 
 public:
@@ -67,6 +69,12 @@ public:
     void setCheck(bool i);
 
     void setIdNode(int id);
+
+    void setX(float x) { this->x = x; };
+    void setY(float y) { this->y = y; };
+
+    float getX() { return this->x; };
+    float getY() { return this->y; };
 
 };
 

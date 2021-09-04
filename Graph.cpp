@@ -855,12 +855,6 @@ void Graph::setId(int id)
 
 void Graph::AGMRG_Guloso(int grau)
 {
-    if (number_edges != (order * (order - 1) / 2))
-    {
-        cout << "O grafo precisa ser completo!" << endl;
-        return;
-    }
-
     Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
 
     list<Edge *> listEdgesAux;
@@ -878,6 +872,7 @@ void Graph::AGMRG_Guloso(int grau)
             listEdgesAux.push_back(edge);
         }
     }
+
     int contador;
     for (Edge *&EdgeAux : listEdgesAux)
     {
@@ -892,6 +887,7 @@ void Graph::AGMRG_Guloso(int grau)
         if (contador == listEdgesFinal.size())
             listEdgesFinal.push_front(EdgeAux);
     }
+
     listEdgesFinal.sort(ListaArestaComparator());
 
     for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
@@ -920,12 +916,6 @@ void Graph::AGMRG_Guloso(int grau)
 
 void Graph::AGMRG_GulosoRandomizado(int grau)
 {
-    if (number_edges != (order * (order - 1) / 2))
-    {
-        cout << "O grafo precisa ser completo!" << endl;
-        return;
-    }
-
     Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     int menorCusto = 0;
 
@@ -1017,12 +1007,6 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
 
 void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 {
-    if (number_edges != (order * (order - 1) / 2))
-    {
-        cout << "O grafo precisa ser completo!" << endl;
-        return;
-    }
-
     Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     int menorCusto = 0;
 
