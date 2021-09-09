@@ -19,3 +19,5 @@ Para rodar o programa execute o seguinte código na pasta do repositório:
 ```
 •./execGrupo15 <arquivo_entrada> <arquivo_saida> <Opc_Direc> <Opc_Peso_Aresta> <Opc_Peso_Nos>
 ```
+## Link das instâncias
+

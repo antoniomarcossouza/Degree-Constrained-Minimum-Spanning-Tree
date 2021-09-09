@@ -379,7 +379,7 @@ int main(int argc, char const *argv[])
         int opcao;
         cout << "----" << endl;
         cout << "[1] O arquivo de entrada possui um grafo" << endl;
-        cout << "[2] O arquivo de entrada possui pontos no espaço" << endl;
+        cout << "[2] O arquivo de entrada possui pontos no espaco" << endl;
         cin >> opcao;
 
         switch (opcao)

@@ -853,8 +853,8 @@ void Graph::AGMRG_Guloso(int grau)
     list<Edge *> listEdgesFinal;
 
     clock_t inicio = clock();
-    float fator_penalizador1 = (float)rand() / (float)(5 / 9);
-    float fator_penalizador2 = (float)rand() / (float)(5 / 9);
+    float fator_penalizador1 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
+    float fator_penalizador2 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
 
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
@@ -919,8 +919,8 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
 
-        float fator_penalizador1 = (float)rand() / (float)(5 / 9);
-        float fator_penalizador2 = (float)rand() / (float)(5 / 9);
+        float fator_penalizador1 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
+        float fator_penalizador2 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
 
         for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         {
@@ -1005,8 +1005,8 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 
     clock_t inicio = clock();
 
-    float fator_penalizador1 = (float)rand() / (float)(5 / 9);
-    float fator_penalizador2 = (float)rand() / (float)(5 / 9);
+    float fator_penalizador1 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
+    float fator_penalizador2 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
 
     bool acrecentado = true;
 
@@ -1067,8 +1067,8 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
                     menorCusto += edge->getWeight();
                 }
             }
-            fator_penalizador1 += (float)rand() / (float)(1 / 9);
-            fator_penalizador2 += (float)rand() / (float)(1 / 9);
+            fator_penalizador1 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
+            fator_penalizador2 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
         }
         else
         {
@@ -1086,26 +1086,26 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
                 menorCusto = custo;
                 if (acrecentado == true)
                 {
-                    fator_penalizador1 += (float)rand() / (float)(1 / 9);
-                    fator_penalizador2 += (float)rand() / (float)(1 / 9);
+                    fator_penalizador1 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
+                    fator_penalizador2 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
                 }
                 else
                 {
-                    fator_penalizador1 -= (float)rand() / (float)(1 / 9);
-                    fator_penalizador2 -= (float)rand() / (float)(1 / 9);
+                    fator_penalizador1 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
+                    fator_penalizador2 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
                 }
                 return;
             }
 
             if (acrecentado == true)
             {
-                fator_penalizador1 -= (float)rand() / (float)(1 / 9);
-                fator_penalizador2 -= (float)rand() / (float)(1 / 9);
+                fator_penalizador1 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
+                fator_penalizador2 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
             }
             else
             {
-                fator_penalizador1 += (float)rand() / (float)(1 / 9);
-                fator_penalizador2 += (float)rand() / (float)(1 / 9);
+                fator_penalizador1 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
+                fator_penalizador2 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
             }
         }
     }
