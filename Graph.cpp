@@ -197,6 +197,18 @@ bool Graph::searchNode(int id)
     return false;
 }
 
+bool Graph::searchPosition(float x, float y)
+{
+    if (this->first_node != nullptr)
+    {
+        for (Node *aux = this->first_node; aux != nullptr; aux = aux->getNextNode())
+            if (aux->getX() == x && aux->getY() == y)
+                return true;
+    }
+
+    return false;
+}
+
 Node *Graph::getNode(int id)
 {
     if (this->first_node != nullptr)
@@ -853,14 +865,14 @@ void Graph::AGMRG_Guloso(int grau)
     list<Edge *> listEdgesFinal;
 
     clock_t inicio = clock();
-    float fator_penalizador1 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
-    float fator_penalizador2 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
+    float fator_penalizador1 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+    float fator_penalizador2 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
 
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
-            edge->setScore(fator_penalizador1 * edge->getWeight() * fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
+            edge->setScore(edge->getWeight());
             listEdgesAux.push_back(edge);
         }
     }
@@ -888,7 +900,7 @@ void Graph::AGMRG_Guloso(int grau)
     for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
         node->setFather(node->getId());
 
-    int custoTotalArvore = 0;
+    long long custoTotalArvore = 0;
     for (Edge *&EdgeAux : listEdgesFinal)
     {
         if (AGMRG->getNode(EdgeAux->getTargetId())->getInDegree() < grau)
@@ -904,12 +916,13 @@ void Graph::AGMRG_Guloso(int grau)
     clock_t fim = clock();
     cout << AGMRG->imprimir();
     cout << "Tempo: " << fim - inicio << " ms" << endl;
+    cout << "Custo: " <<  custoTotalArvore << endl;
 }
 
 void Graph::AGMRG_GulosoRandomizado(int grau)
 {
     Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
-    int menorCusto = 0;
+    long long menorCusto = 0;
 
     clock_t inicio = clock();
 
@@ -919,14 +932,16 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
 
-        float fator_penalizador1 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
-        float fator_penalizador2 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
+        float fator_penalizador1 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+        float fator_penalizador2 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
 
         for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         {
             for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
             {
-                edge->setScore(fator_penalizador1 * edge->getWeight() * fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
+                
+                edge->setScore(fator_penalizador1 * edge->getWeight() + fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
+
                 listEdgesAux.push_back(edge);
             }
         }
@@ -953,7 +968,7 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
         for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
             node->setFather(node->getId());
 
-        int custoTotalArvore = 0;
+        long long custoTotalArvore = 0;
         for (Edge *&EdgeAux : listEdgesFinal)
         {
             if (!cicle(EdgeAux) && (AGMRG->getNode(EdgeAux->getTargetId())->getInDegree() < grau))
@@ -966,28 +981,14 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
         if (AGMRG_Best->first_node == nullptr)
         {
             AGMRG_Best = AGMRG;
-            for (Node *node = AGMRG_Best->first_node; node != nullptr; node = node->getNextNode())
-            {
-                for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
-                {
-                    menorCusto += edge->getWeight();
-                }
-            }
+            menorCusto = custoTotalArvore;
         }
         else
         {
-            int custo = 0;
-            for (Node *node = AGMRG->first_node; node != nullptr; node = node->getNextNode())
-            {
-                for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
-                {
-                    custo += edge->getWeight();
-                }
-            }
-            if (custo < menorCusto)
+            if (custoTotalArvore < menorCusto)
             {
                 AGMRG_Best = AGMRG;
-                menorCusto = custo;
+                menorCusto = custoTotalArvore;
             }
         }
     }
@@ -1000,15 +1001,12 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
 
 void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 {
-    Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
+   Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     int menorCusto = 0;
 
     clock_t inicio = clock();
 
-    float fator_penalizador1 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
-    float fator_penalizador2 = (1) + (((float) rand()) / (float) RAND_MAX) * (4);
-
-    bool acrecentado = true;
+    bool acrescentando = true;
 
     for (int i = 0; i < 100; i++)
     {
@@ -1016,11 +1014,16 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
 
+        float fator_penalizador1 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+        float fator_penalizador2 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+
         for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         {
             for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
             {
-                edge->setScore(fator_penalizador1 * edge->getWeight() * fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
+                
+                edge->setScore(fator_penalizador1 * edge->getWeight() + fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
+
                 listEdgesAux.push_back(edge);
             }
         }
@@ -1047,7 +1050,7 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
         for (Node *node = getFirstNode(); node != nullptr; node = node->getNextNode())
             node->setFather(node->getId());
 
-        int custoTotalArvore = 0;
+        double custoTotalArvore = 0;
         for (Edge *&EdgeAux : listEdgesFinal)
         {
             if (!cicle(EdgeAux) && (AGMRG->getNode(EdgeAux->getTargetId())->getInDegree() < grau))
@@ -1059,6 +1062,9 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 
         if (AGMRG_Best->first_node == nullptr)
         {
+            fator_penalizador1 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+            fator_penalizador2 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+
             AGMRG_Best = AGMRG;
             for (Node *node = AGMRG_Best->first_node; node != nullptr; node = node->getNextNode())
             {
@@ -1067,11 +1073,10 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
                     menorCusto += edge->getWeight();
                 }
             }
-            fator_penalizador1 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-            fator_penalizador2 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
         }
         else
         {
+            
             int custo = 0;
             for (Node *node = AGMRG->first_node; node != nullptr; node = node->getNextNode())
             {
@@ -1082,30 +1087,31 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
             }
             if (custo < menorCusto)
             {
+                if(acrescentando) {
+
+                    fator_penalizador1 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                    fator_penalizador2 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                
+                } else {
+                
+                    fator_penalizador1 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                    fator_penalizador2 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                }
+
                 AGMRG_Best = AGMRG;
                 menorCusto = custo;
-                if (acrecentado == true)
-                {
-                    fator_penalizador1 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-                    fator_penalizador2 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-                }
-                else
-                {
-                    fator_penalizador1 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-                    fator_penalizador2 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-                }
-                return;
-            }
+            } else {
 
-            if (acrecentado == true)
-            {
-                fator_penalizador1 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-                fator_penalizador2 -= (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-            }
-            else
-            {
-                fator_penalizador1 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
-                fator_penalizador2 += (0) + (((float) rand()) / (float) RAND_MAX) * (1);
+                if(acrescentando) {
+                    acrescentando = false;
+                    fator_penalizador1 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                    fator_penalizador2 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                
+                } else {
+                    acrescentando = true;
+                    fator_penalizador1 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                    fator_penalizador2 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                }
             }
         }
     }

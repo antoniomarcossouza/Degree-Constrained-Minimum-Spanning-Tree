@@ -45,6 +45,7 @@ public:
     void insertEdge(int id, int target_id, float weight);
     void removeNode(int id);
     bool searchNode(int id);
+    bool searchPosition(float x, float y);
     Node *getNode(int id);
 
     //methods phase1

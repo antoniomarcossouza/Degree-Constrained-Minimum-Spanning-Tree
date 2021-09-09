@@ -84,7 +84,7 @@ Graph *leituraInstancia(ifstream &input_file, int directed, int weightedEdge, in
     int numEdges;
 
     //Pegando a ordem do grafo
-    input_file >> order >> numEdges;
+    input_file >> order;
 
     //Criando objeto grafo
     Graph *graph = new Graph(order, directed, weightedEdge, weightedNode);
@@ -92,30 +92,36 @@ Graph *leituraInstancia(ifstream &input_file, int directed, int weightedEdge, in
     //Leitura de arquivo
     int id;
     double x, y;
+    
     while (input_file >> id >> x >> y)
-    {
-        graph->insertNode(id);
-
-        Node *no = graph->getNode(id);
-        no->setX(x);
-        no->setY(y);
+    {   
+        if(!graph->searchPosition(x, y)){ 
+            graph->insertNode(id);
+            Node *no = graph->getNode(id);
+            no->setX(x);
+            no->setY(y);
+        }
     }
 
     for (Node *node = graph->getFirstNode(); node != nullptr; node = node->getNextNode())
     {
         for (Node *no = node->getNextNode(); no != nullptr; no = no->getNextNode())
         {
-            float valf = sqrt( (pow(node->getX() - no->getX() ,2)) * (pow(node->getY() - no->getY() ,2)) );
-            int vali = (int)valf;
-            float var = abs(valf - vali);
+            if(no->getX() != node->getX() && no->getY() != node->getY() ) {
+                
+                float valf = sqrt( (pow(node->getX() - no->getX() ,2)) + (pow(node->getY() - no->getY() ,2)) );
+            
+                int vali = (int)valf;
+                float var = abs(valf - vali);
 
-            float dis;
-            var >= 0.5 ? dis = vali++ : dis  = vali;
-
-            no->insertEdge(no->getId(), node->getId(), dis);
-
+                float dis;
+                var >= 0.5 ? dis = vali++ : dis  = vali;
+               graph->insertEdge(no->getId(), node->getId(), dis);
+            } 
         }
     }
+
+    
 
     return graph;
 }
