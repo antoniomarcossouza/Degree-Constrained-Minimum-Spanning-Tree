@@ -15,7 +15,7 @@ using namespace std;
 Graph *leitura(ifstream &input_file, int directed, int weightedEdge, int weightedNode)
 {
 
-    //Variáveis para auxiliar na criação dos nós no Grafo
+    //Variaveis para auxiliar na criacao dos nos no Grafo
     int idNodeSource;
     int idNodeTarget;
     int order;
@@ -76,7 +76,7 @@ Graph *leitura(ifstream &input_file, int directed, int weightedEdge, int weighte
 Graph *leituraInstancia(ifstream &input_file, int directed, int weightedEdge, int weightedNode)
 {
 
-    //Variáveis para auxiliar na criação dos nós no Grafo
+    //Variaveis para auxiliar na criacao dos nos no Grafo
     int idNodeSource;
     int idNodeTarget;
     int weight;
@@ -131,16 +131,17 @@ int menu()
 
     int selecao;
 
+    cout << "----" << endl;
     cout << "MENU" << endl;
     cout << "----" << endl;
-    cout << "[1] Fecho transitivo direto deste vértice." << endl;
-    cout << "[2] Fecho transitivo indireto deste vértice." << endl;
-    cout << "[3] Caminho Mínimo entre dois vértices - Dijkstra" << endl;
-    cout << "[4] Caminho Mínimo entre dois vértices - Floyd" << endl;
-    cout << "[5] Árvore Geradora Mínima de Prim" << endl;
-    cout << "[6] Árvore Geradora Mínima de Kruskal" << endl;
+    cout << "[1] Fecho transitivo direto deste vertice." << endl;
+    cout << "[2] Fecho transitivo indireto deste vertice." << endl;
+    cout << "[3] Caminho Minimo entre dois vertices - Dijkstra" << endl;
+    cout << "[4] Caminho Minimo entre dois vertices - Floyd" << endl;
+    cout << "[5] Árvore Geradora Minima de Prim" << endl;
+    cout << "[6] Árvore Geradora Minima de Kruskal" << endl;
     cout << "[7] Árvore dada pela ordem de caminhamento em profundidade" << endl;
-    cout << "[8] Grafo acíclico direcionado" << endl;
+    cout << "[8] Grafo aciclico direcionado" << endl;
     cout << "[9] AGMRG Guloso" << endl;
     cout << "[10] AGMRG Guloso Randomizado" << endl;
     cout << "[11] AGMRG Guloso Randomizado Reativo" << endl;
@@ -158,7 +159,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
     {
     case 0:
     {
-        cout << "Você está saindo." << endl;
+        cout << "Saindo..." << endl;
         break;
     }
     case 1:
@@ -166,12 +167,12 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected())
         {
             int id;
-            cout << "Digite o valor de um Id do vertice: ";
+            cout << "Digite o valor de um ID do vertice: ";
             cin >> id;
             graph->transitivoDireto(output_file, id);
         }
         else
-            cout << "Esté grafo não é direcionado" << endl;
+            cout << "Esse grafo nao e direcionado" << endl;
         break;
     }
 
@@ -180,12 +181,12 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected())
         {
             int id;
-            cout << "Digite o valor de um Id do vertice: ";
+            cout << "Digite o valor de um ID do vertice: ";
             cin >> id;
             graph->transitivoIndireto(output_file, id);
         }
         else
-            cout << "Esté grafo não é direcionado" << endl;
+            cout << "Esse grafo nao e direcionado" << endl;
         break;
     }
 
@@ -222,7 +223,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         }
         else
         {
-            cout << "Esté grafo não tem aresta ponderada ou direcionado!" << endl;
+            cout << "Esse grafo nao tem aresta ponderada ou e direcionado!" << endl;
         }
         break;
     }
@@ -236,7 +237,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         }
         else
         {
-            cout << "Esté grafo não tem aresta ponderada ou direcionado!" << endl;
+            cout << "Esse grafo nao tem aresta ponderada ou e direcionado!" << endl;
         }
         break;
     }
@@ -275,7 +276,7 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
             graph->topologicalSorting(output_file);
         }
         else
-            cout << "O grafo não é acíclico direcionado." << endl;
+            cout << "O grafo nao e aciclico direcionado." << endl;
         break;
     }
     case 9:
@@ -283,13 +284,13 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
-            cout << "Qual é a restrição de grau da arvore gerado? " << endl;
+            cout << "Qual e a restricao de grau da arvore geradora? " << endl;
             cin >> grau;
             graph->AGMRG_Guloso(grau);
         }
         else
         {
-            cout << "O grafo precisa ser direciona e ter peso nas arestas." << endl;
+            cout << "O grafo precisa ser direcionado e ter peso nas arestas." << endl;
         }
         break;
     }
@@ -298,13 +299,13 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
-            cout << "Qual é a restrição de grau da arvore gerado? " << endl;
+            cout << "Qual e a restricao de grau da arvore geradora? " << endl;
             cin >> grau;
             graph->AGMRG_GulosoRandomizado(grau);
         }
         else
         {
-            cout << "O grafo precisa ser direciona e ter peso nas arestas." << endl;
+            cout << "O grafo precisa ser direcionado e ter peso nas arestas." << endl;
         }
         break;
     }
@@ -313,19 +314,19 @@ void selecionar(int selecao, Graph *graph, ofstream &output_file)
         if (graph->getDirected() && graph->getWeightedEdge())
         {
             int grau;
-            cout << "Qual é a restrição de grau da arvore gerado? " << endl;
+            cout << "Qual e a restricao de grau da arvore geradora? " << endl;
             cin >> grau;
             graph->AGMRG_GulosoRandomizadoReativo(grau);
         }
         else
         {
-            cout << "O grafo precisa ser direciona e ter peso nas arestas." << endl;
+            cout << "O grafo precisa ser direcionado e ter peso nas arestas." << endl;
         }
         break;
     }
     default:
     {
-        cout << " Error!!! invalid option!!" << endl;
+        cout << " Erro!!! Opcao Invalida!!" << endl;
     }
     }
 }
@@ -355,7 +356,7 @@ int mainMenu(ofstream &output_file, Graph *graph)
 int main(int argc, char const *argv[])
 {
 
-    //Verificação se todos os parâmetros do programa foram entrados
+    //Verificacao se todos os parametros do programa foram entrados
     if (argc != 6)
     {
         cout << "ERROR: Expecting: ./execGrupo15 <arquivo_entrada> <arquivo_saida> <Opc_Direc> <Opc_Peso_Aresta> <Opc_Peso_Nos>" << endl;
@@ -406,7 +407,7 @@ int main(int argc, char const *argv[])
     //Fechando arquivo de entrada
     input_file.close();
 
-    //Fechando arquivo de saída
+    //Fechando arquivo de saida
     output_file.close();
 
     return 0;

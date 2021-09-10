@@ -13,7 +13,6 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
-#include <tuple>
 
 #define INF 99999
 
@@ -56,6 +55,7 @@ int Graph::getOrder()
 
     return this->order;
 }
+
 int Graph::getNumberEdges()
 {
 
@@ -230,7 +230,7 @@ void Graph::floydWarshall(ofstream &output_file)
     int contadorNode = 0;
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode(), contadorNode++)
     {
-        node->setPosition(contadorNode); // Seta a posição dos nós
+        node->setPosition(contadorNode); // Seta a posiçao dos nos
     }
 
     for (int i = 0; i < order; i++)
@@ -240,7 +240,7 @@ void Graph::floydWarshall(ofstream &output_file)
             dist[i][j] = INF; // Seta todos os valores da matriz pra infinito
             if (i == j)
             {
-                dist[i][j] = 0; // Coloca a distância entre o vértice e ele mesmo
+                dist[i][j] = 0; // Coloca a distancia entre o vertice e ele mesmo
             }
         }
     }
@@ -249,7 +249,7 @@ void Graph::floydWarshall(ofstream &output_file)
     {
         for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
         {
-            // Itera por todos as arestas, colocando o peso como a distância entre os 2 nós
+            // Itera por todos as arestas, colocando o peso como a distancia entre os 2 nos
             Node *aux = getNode(edge->getTargetId());
             dist[node->getPosition()][aux->getPosition()] = edge->getWeight();
         }
@@ -261,7 +261,7 @@ void Graph::floydWarshall(ofstream &output_file)
         {
             for (int j = 0; j < order; j++)
             {
-                // Coloca a menor distância entre os nós restantes
+                // Coloca a menor distancia entre os nos restantes
                 if (dist[i][j] > dist[i][k] + dist[k][j])
                 {
                     dist[i][j] = dist[i][k] + dist[k][j];
@@ -316,7 +316,7 @@ float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
     // percorrendo todos os nos
     while (p != nullptr)
     {
-        // definindo que cada vertice terá seu proprio indice de busca e posicao no vetor de nodes
+        // definindo que cada vertice tera seu proprio indice de busca e posicao no vetor de nodes
         nodes[p->getIndexSearch()] = p->getId();
 
         // verificando a igualdade de nos
@@ -328,7 +328,7 @@ float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
         }
         else
         {
-            // atribuindo infinito para os nodes que não pertence ao seu conjunto de vizinhos
+            // atribuindo infinito para os nodes que nao pertence ao seu conjunto de vizinhos
             dist[p->getIndexSearch()] = INF;
             ant[p->getIndexSearch()] = -1;
         }
@@ -366,7 +366,7 @@ float Graph::dijkstra(ofstream &output_file, int idSource, int idTarget)
         }
         numeroNosaux--;
     }
-    output_file << "Distância mínima entre " << idSource << " e " << idTarget << endl;
+    output_file << "Distancia minima entre " << idSource << " e " << idTarget << endl;
 
     for (int i = 0; i < getOrder(); i++)
     {
@@ -445,7 +445,7 @@ void Graph::topologicalSorting_aux(vector<int> *no, int in[])
                 return;
             }
         }
-        cout << "O grafo não é acíclico direcionado." << endl;
+        cout << "O grafo nao e aciclico direcionado." << endl;
     }
 }
 
@@ -453,21 +453,21 @@ void Graph::depthFirstSearch(int v, ofstream &output_file)
 {
 
     Node *node = this->first_node;        // no aponta para primeiro no
-    bool *visited = new bool[getOrder()]; // vetor para verificar os nós visited
+    bool *visited = new bool[getOrder()]; // vetor para verificar os nos visited
 
     for (int i = 0; i < getOrder(); i++)
     {
-        node->setIndexSearch(i);    // setando indice de busca dos nós
+        node->setIndexSearch(i);    // setando indice de busca dos nos
         visited[i] = 0;             // setando indice visited como false
-        node = node->getNextNode(); // percorrendo todos os nós
+        node = node->getNextNode(); // percorrendo todos os nos
     }
 
-    node = getNode(v); // buscando o nó no grafo
+    node = getNode(v); // buscando o no no grafo
 
     if (node == nullptr)
-    { // checando a presença do nó no grafo
+    { // checando a presença do no no grafo
 
-        output_file << "Erro de busca: No não encontrado!" << endl;
+        output_file << "Erro de busca: No nao encontrado!" << endl;
     }
     else
     {
@@ -594,6 +594,7 @@ Graph::agmKruskal(Graph *graph, ofstream &output_file)
 
     // imprimir o resultado final (Grafo) em tela
     output_file << graphKruskal->imprimir();
+    return graphKruskal;
 }
 
 void Graph::agmPrim(ofstream &output_file)
@@ -718,7 +719,7 @@ bool Graph::isConnected()
     return true;
 }
 
-// Funções da primeira etapa
+// Funçoes da primeira etapa
 
 void Graph::transitivoDireto(ofstream &output_file, int id)
 {
@@ -865,8 +866,8 @@ void Graph::AGMRG_Guloso(int grau)
     list<Edge *> listEdgesFinal;
 
     clock_t inicio = clock();
-    float fator_penalizador1 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-    float fator_penalizador2 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+    float fator_penalizador1 = (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+    float fator_penalizador2 = (2) + (((float)rand()) / (float)RAND_MAX) * (4);
 
     for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
     {
@@ -883,7 +884,7 @@ void Graph::AGMRG_Guloso(int grau)
         contador = 0;
         for (Edge *&EdgeAux2 : listEdgesFinal)
         {
-            if (EdgeAux2->getTargetId() == EdgeAux->getIdOrigem() && EdgeAux2->getIdOrigem() == EdgeAux->getTargetId())
+            if (EdgeAux2->getTargetId() == EdgeAux->getIdOrigem() && EdgeAux2->getIdOrigem() == EdgeAux->getTargetId()) 
                 break;
             else
                 contador++;
@@ -916,7 +917,7 @@ void Graph::AGMRG_Guloso(int grau)
     clock_t fim = clock();
     cout << AGMRG->imprimir();
     cout << "Tempo: " << fim - inicio << " ms" << endl;
-    cout << "Custo: " <<  custoTotalArvore << endl;
+    cout << "Custo: " << custoTotalArvore << endl;
 }
 
 void Graph::AGMRG_GulosoRandomizado(int grau)
@@ -926,20 +927,20 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
 
     clock_t inicio = clock();
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 2500; i++)
     {
         Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
 
-        float fator_penalizador1 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-        float fator_penalizador2 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+        float fator_penalizador1 = (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+        float fator_penalizador2 = (2) + (((float)rand()) / (float)RAND_MAX) * (4);
 
         for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         {
             for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
             {
-                
+
                 edge->setScore(fator_penalizador1 * edge->getWeight() + fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
 
                 listEdgesAux.push_back(edge);
@@ -1001,27 +1002,27 @@ void Graph::AGMRG_GulosoRandomizado(int grau)
 
 void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 {
-   Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
+    Graph *AGMRG_Best = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
     int menorCusto = 0;
 
     clock_t inicio = clock();
 
     bool acrescentando = true;
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 2500; i++)
     {
         Graph *AGMRG = new Graph(getOrder(), getDirected(), getWeightedEdge(), getWeightedNode());
         list<Edge *> listEdgesAux;
         list<Edge *> listEdgesFinal;
 
-        float fator_penalizador1 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-        float fator_penalizador2 = (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+        float fator_penalizador1 = (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+        float fator_penalizador2 = (2) + (((float)rand()) / (float)RAND_MAX) * (4);
 
         for (Node *node = this->first_node; node != nullptr; node = node->getNextNode())
         {
             for (Edge *edge = node->getFirstEdge(); edge != nullptr; edge = edge->getNextEdge())
             {
-                
+
                 edge->setScore(fator_penalizador1 * edge->getWeight() + fator_penalizador2 * getNode(edge->getTargetId())->getInDegree());
 
                 listEdgesAux.push_back(edge);
@@ -1062,8 +1063,8 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
 
         if (AGMRG_Best->first_node == nullptr)
         {
-            fator_penalizador1 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-            fator_penalizador2 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+            fator_penalizador1 += (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+            fator_penalizador2 += (2) + (((float)rand()) / (float)RAND_MAX) * (4);
 
             AGMRG_Best = AGMRG;
             for (Node *node = AGMRG_Best->first_node; node != nullptr; node = node->getNextNode())
@@ -1076,7 +1077,7 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
         }
         else
         {
-            
+
             int custo = 0;
             for (Node *node = AGMRG->first_node; node != nullptr; node = node->getNextNode())
             {
@@ -1087,30 +1088,36 @@ void Graph::AGMRG_GulosoRandomizadoReativo(int grau)
             }
             if (custo < menorCusto)
             {
-                if(acrescentando) {
+                if (acrescentando)
+                {
 
-                    fator_penalizador1 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-                    fator_penalizador2 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-                
-                } else {
-                
-                    fator_penalizador1 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-                    fator_penalizador2 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                    fator_penalizador1 += (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+                    fator_penalizador2 += (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+                }
+                else
+                {
+
+                    fator_penalizador1 -= (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+                    fator_penalizador2 -= (2) + (((float)rand()) / (float)RAND_MAX) * (4);
                 }
 
                 AGMRG_Best = AGMRG;
                 menorCusto = custo;
-            } else {
+            }
+            else
+            {
 
-                if(acrescentando) {
+                if (acrescentando)
+                {
                     acrescentando = false;
-                    fator_penalizador1 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-                    fator_penalizador2 -= (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-                
-                } else {
+                    fator_penalizador1 -= (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+                    fator_penalizador2 -= (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+                }
+                else
+                {
                     acrescentando = true;
-                    fator_penalizador1 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
-                    fator_penalizador2 += (2) + (((float) rand()) / (float) RAND_MAX) * (4);
+                    fator_penalizador1 += (2) + (((float)rand()) / (float)RAND_MAX) * (4);
+                    fator_penalizador2 += (2) + (((float)rand()) / (float)RAND_MAX) * (4);
                 }
             }
         }
