@@ -21,7 +21,7 @@ Para rodar o programa execute o seguinte código na pasta do repositório:
 ```
 ## Maximo de iterações para cada algoritmo 
 
-- 100 Iterações 
+- 2500 Iterações 
 
 ## Dicas de Uso 
 
