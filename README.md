@@ -1,5 +1,7 @@
 # Trabalho Prático - DCC025
 
+Projeto com o tema "Árvore Geradora Mínima com Restrição de Grau" desenvolvido para a disciplina DCC059 - Teoria dos Grafos - Semestre 2020.1
+
 ## Equipe
 
 > [Antônio Marcos Souza Pereira](https://github.com/antoniomarcossouza) - 202065245A\
