@@ -1,6 +1,6 @@
 # Trabalho Prático - DCC025
 
-Projeto com o tema "Árvore Geradora Mínima com Restrição de Grau" desenvolvido para a disciplina DCC059 - Teoria dos Grafos - Semestre 2020.1
+Projeto com o tema "Árvore Geradora Mínima com Restrição de Grau" desenvolvido para a disciplina DCC059 - Teoria dos Grafos - Semestre 2021.1
 
 ## Equipe
 
